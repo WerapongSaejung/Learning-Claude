@@ -1,0 +1,539 @@
+<title>สไลด์อบรม Claude ที.พี.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;700&family=IBM+Plex+Sans+Thai:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+:root{
+  --ground:#F7F8F6; --surface:#FFFFFF; --surface-2:#EAEEE9;
+  --ink:#14201C; --ink-2:#42544C; --ink-3:#7B8A82;
+  --line:#D5DCD6; --line-2:#BDC8BF;
+  --accent:#0E5C4A; --accent-soft:#E1EDE7; --accent-ink:#0B4A3C;
+  --hold:#B7791F; --hold-soft:#FBF1DE;
+  --stop:#A62A21; --stop-soft:#FAE8E6;
+  --bar:#14201C; --bar-ink:#F7F8F6;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --ground:#0D1310; --surface:#151C18; --surface-2:#1C2520;
+    --ink:#E9EFEB; --ink-2:#AEBDB5; --ink-3:#84938B;
+    --line:#28332C; --line-2:#3A473F;
+    --accent:#55C6A5; --accent-soft:#132720; --accent-ink:#84DBC1;
+    --hold:#DFA745; --hold-soft:#2A2115;
+    --stop:#E58074; --stop-soft:#2D1917;
+    --bar:#050907; --bar-ink:#E9EFEB;
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#0D1310; --surface:#151C18; --surface-2:#1C2520;
+  --ink:#E9EFEB; --ink-2:#AEBDB5; --ink-3:#84938B;
+  --line:#28332C; --line-2:#3A473F;
+  --accent:#55C6A5; --accent-soft:#132720; --accent-ink:#84DBC1;
+  --hold:#DFA745; --hold-soft:#2A2115;
+  --stop:#E58074; --stop-soft:#2D1917;
+  --bar:#050907; --bar-ink:#E9EFEB;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{
+  background:var(--ground);color:var(--ink);
+  font-family:Sarabun,"Noto Sans Thai",system-ui,sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3{font-family:"IBM Plex Sans Thai",Sarabun,sans-serif;margin:0;text-wrap:balance;letter-spacing:-.012em}
+.mono{font-family:"IBM Plex Mono",ui-monospace,monospace;font-variant-numeric:tabular-nums}
+
+/* ---------- deck ---------- */
+.deck{padding-bottom:56px}
+.slide{
+  min-height:100vh;display:flex;flex-direction:column;justify-content:center;
+  /* พื้นหลังเต็มความกว้างจอ แต่เนื้อหาอยู่ในคอลัมน์กว้างไม่เกิน 1180px */
+  padding-block:clamp(32px,6vw,84px) clamp(88px,10vw,120px);
+  padding-inline:max(clamp(24px,7vw,96px),calc((100% - 1180px) / 2));
+  border-bottom:1px solid var(--line);
+}
+html.js .slide{display:none;border-bottom:none}
+html.js .slide.on{display:flex;animation:in .28s ease-out}
+@keyframes in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){html.js .slide.on{animation:none}}
+
+.kicker{
+  font-family:"IBM Plex Mono",monospace;font-size:clamp(11px,1.1vw,13px);
+  letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin-bottom:20px;
+}
+.slide h2{font-size:clamp(30px,4.6vw,60px);font-weight:700;line-height:1.14}
+.slide h3{font-size:clamp(20px,2.4vw,30px);font-weight:600;line-height:1.3;margin-bottom:14px}
+.sub{font-size:clamp(17px,1.8vw,25px);color:var(--ink-2);line-height:1.55;margin-top:22px;max-width:34ch}
+.slide p{font-size:clamp(16px,1.5vw,21px);line-height:1.6;margin:0 0 14px;max-width:46ch}
+
+/* title slide */
+.title{border-top:8px solid var(--accent)}
+.title h1{font-size:clamp(38px,7vw,92px);font-weight:700;line-height:1.05}
+.title .org{font-size:clamp(15px,1.6vw,21px);color:var(--ink-2);margin-top:32px}
+.title .meta{display:flex;flex-wrap:wrap;gap:0;margin-top:40px;border:1px solid var(--line)}
+.title .meta div{padding:12px 20px;border-right:1px solid var(--line);flex:1 1 auto}
+.title .meta div:last-child{border-right:none}
+.title .meta dt{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);margin:0 0 3px}
+.title .meta dd{margin:0;font-size:16px;font-weight:600}
+
+/* divider slide */
+.divider{background:var(--accent);color:var(--ground)}
+.divider .kicker{color:var(--ground);opacity:.72}
+.divider h2{color:var(--ground);font-size:clamp(34px,6vw,78px)}
+.divider .sub{color:var(--ground);opacity:.85;max-width:40ch}
+.divider .clock{font-family:"IBM Plex Mono",monospace;font-size:clamp(14px,1.5vw,19px);color:var(--ground);opacity:.72;margin-top:30px;letter-spacing:.08em}
+
+/* big numbered list */
+ol.big,ul.big{list-style:none;padding:0;margin:34px 0 0;display:grid;gap:1px;background:var(--line)}
+ol.big li,ul.big li{
+  background:var(--surface);padding:18px 22px;font-size:clamp(16px,1.65vw,23px);line-height:1.5;
+  display:flex;gap:18px;align-items:flex-start;
+}
+ol.big{counter-reset:n}
+ol.big li{counter-increment:n}
+ol.big li::before{
+  content:counter(n);font-family:"IBM Plex Mono",monospace;font-weight:600;
+  font-size:clamp(13px,1.2vw,16px);flex:none;width:32px;height:32px;
+  display:grid;place-items:center;background:var(--accent);color:var(--ground);border-radius:2px;margin-top:3px;
+}
+ul.big li::before{content:"";flex:none;width:9px;height:9px;background:var(--accent);border-radius:50%;margin-top:14px}
+li b{font-weight:700}
+li .note{display:block;font-size:.8em;color:var(--ink-3);margin-top:4px;line-height:1.45}
+
+/* prompt boxes */
+.prompt{
+  border:1px solid var(--line-2);background:var(--surface);padding:20px 24px;
+  font-size:clamp(17px,1.8vw,25px);line-height:1.5;margin:24px 0 0;position:relative;
+}
+.prompt .lbl{
+  position:absolute;top:-11px;left:18px;background:var(--ground);padding:0 8px;
+  font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;
+}
+.prompt.bad{border-color:var(--stop);background:var(--stop-soft)}
+.prompt.bad .lbl{color:var(--stop)}
+.prompt.good{border-color:var(--accent);background:var(--accent-soft)}
+.prompt.good .lbl{color:var(--accent-ink)}
+
+/* buckets */
+.buckets{display:grid;gap:14px;margin-top:34px}
+.bk{display:grid;grid-template-columns:auto 1fr;gap:20px;align-items:start;padding:18px 22px;border:1px solid var(--line);background:var(--surface);border-left-width:6px}
+.bk.r{border-left-color:var(--stop)} .bk.a{border-left-color:var(--hold)} .bk.g{border-left-color:var(--accent)}
+.bk .name{font-family:"IBM Plex Sans Thai",sans-serif;font-weight:700;font-size:clamp(16px,1.5vw,21px);white-space:nowrap}
+.bk.r .name{color:var(--stop)} .bk.a .name{color:var(--hold)} .bk.g .name{color:var(--accent-ink)}
+.bk .ex{font-size:clamp(14px,1.3vw,18px);color:var(--ink-2);line-height:1.5}
+
+/* statement slide */
+.statement{border-left:10px solid var(--accent);padding-left:clamp(20px,3vw,40px)}
+.statement h2{font-size:clamp(28px,4.4vw,56px);line-height:1.2}
+.statement .who{font-family:"IBM Plex Mono",monospace;font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin-top:26px}
+
+/* data slide */
+.tw{overflow-x:auto;margin-top:30px;border:1px solid var(--line);background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:clamp(14px,1.35vw,19px);min-width:520px}
+th{text-align:left;font-family:"IBM Plex Sans Thai",sans-serif;font-weight:600;font-size:clamp(12px,1.1vw,15px);padding:12px 16px;background:var(--surface-2);border-bottom:1px solid var(--line-2);white-space:nowrap}
+td{padding:12px 16px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border-bottom:none}
+td.num{white-space:nowrap;font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums}
+
+.two{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:30px}
+.card{border:1px solid var(--line);background:var(--surface);padding:20px 22px}
+.card h3{font-size:clamp(17px,1.6vw,22px);margin-bottom:10px}
+.card p{font-size:clamp(14px,1.3vw,18px);margin:0;max-width:none}
+.card .tag{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);display:block;margin-bottom:8px}
+
+.callout{margin-top:30px;padding:18px 22px;border-left:6px solid var(--hold);background:var(--hold-soft);font-size:clamp(15px,1.45vw,20px);line-height:1.55}
+.callout b{color:var(--hold)}
+
+/* ---------- control bar ---------- */
+.bar{
+  position:fixed;left:0;right:0;bottom:0;height:52px;background:var(--bar);color:var(--bar-ink);
+  display:flex;align-items:center;gap:16px;padding:0 18px;z-index:20;
+  font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:.08em;
+}
+html:not(.js) .bar{display:none}
+.bar .doc{opacity:.55;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bar .spacer{flex:1}
+.bar .where{opacity:.85;white-space:nowrap}
+.bar button{
+  font:inherit;letter-spacing:.06em;background:transparent;color:var(--bar-ink);
+  border:1px solid rgba(255,255,255,.28);border-radius:2px;padding:6px 13px;cursor:pointer;
+}
+.bar button:hover{background:rgba(255,255,255,.1)}
+.bar button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.bar .count{font-variant-numeric:tabular-nums;opacity:.9;min-width:56px;text-align:right}
+.track{position:fixed;left:0;bottom:52px;height:3px;background:var(--accent);z-index:21;transition:width .2s ease}
+html:not(.js) .track{display:none}
+.hint{
+  position:fixed;right:18px;bottom:64px;z-index:19;font-family:"IBM Plex Mono",monospace;
+  font-size:11px;color:var(--ink-3);background:var(--ground);border:1px solid var(--line);
+  padding:6px 10px;border-radius:2px;
+}
+html:not(.js) .hint{display:none}
+
+@media (max-width:760px){
+  .two{grid-template-columns:1fr}
+  .bk{grid-template-columns:1fr;gap:8px}
+  .bar .doc{display:none}
+  .hint{display:none}
+}
+</style>
+
+<div class="deck">
+
+<section class="slide title on" data-sec="เปิด">
+  <div class="kicker">หลักสูตรอบรมภายใน · คณะผู้บริหาร</div>
+  <h1>ใช้ AI ทำงานจริง<br>ด้วย Claude</h1>
+  <div class="org">บริษัท ที.พี. ดรัก แลบบอราทอรี่ (1969) จำกัด</div>
+  <dl class="meta">
+    <div><dt>เวลา</dt><dd>09:00 – 16:30</dd></div>
+    <div><dt>ผู้เรียน</dt><dd>ผู้บริหาร 5 ท่าน</dd></div>
+    <div><dt>เครื่องมือ</dt><dd>Claude Pro</dd></div>
+    <div><dt>ข้อมูลที่ใช้</dt><dd>ไฟล์สมมติทั้งหมด</dd></div>
+  </dl>
+</section>
+
+<section class="slide" data-sec="เปิด">
+  <div class="kicker">วันนี้มีสองเป้า</div>
+  <h2>ไม่ใช่มาดูผมทำ<br>แต่มาทำเอง</h2>
+  <ol class="big">
+    <li><b>จบวันแล้วท่านใช้ได้จริง</b><span class="note">มี Claude Project ของงานตัวเอง 1 ชิ้น ที่ใช้ได้วันจันทร์</span></li>
+    <li><b>จบวันแล้วท่านตัดสินใจได้</b><span class="note">เห็นว่าถ้าบริษัทเราเอาเข้ามา จะเปลี่ยนอะไร และเสี่ยงตรงไหน</span></li>
+  </ol>
+</section>
+
+<section class="slide" data-sec="เปิด">
+  <div class="kicker">รอบวง · 10 นาที</div>
+  <h2>งานอะไรที่กินเวลาท่าน<br>มากที่สุดในสัปดาห์</h2>
+  <p class="sub">เขียนขึ้นบอร์ดทั้ง 5 ข้อ ตอนบ่ายเราจะกลับมาใช้ลิสต์นี้</p>
+</section>
+
+<section class="slide" data-sec="กติกาข้อมูล">
+  <div class="kicker">ก่อนแตะแป้นพิมพ์</div>
+  <h2>ข้อมูลอะไรใส่ได้ ใส่ไม่ได้</h2>
+  <div class="buckets">
+    <div class="bk r"><div class="name">ห้ามเด็ดขาด</div>
+      <div class="ex">สูตรตำรับ · ข้อมูลทะเบียนยาและ DMF · batch record · ผล stability · ข้อมูลผู้ป่วยที่ระบุตัวได้<br>
+      <b>ห้ามพิมพ์ ห้ามอัปโหลด บนบัญชีส่วนตัว</b></div></div>
+    <div class="bk a"><div class="name">ตัดข้อมูลระบุตัวก่อน</div>
+      <div class="ex">ยอดขายรายลูกค้า · ทะเบียนข้อร้องเรียน · ราคาซัพพลายเออร์ · ชื่อตัวแทนจำหน่าย<br>
+      ลบชื่อและรหัสจริงออกก่อน</div></div>
+    <div class="bk g"><div class="name">ใส่ได้</div>
+      <div class="ex">ประกาศและหลักเกณฑ์ที่เผยแพร่สาธารณะ · ร่างงานเขียนทั่วไป · ข้อมูลที่ไม่ระบุตัวตน</div></div>
+  </div>
+</section>
+
+<section class="slide statement" data-sec="กติกาข้อมูล">
+  <div class="kicker">ประโยคที่ต้องจำ</div>
+  <h2>AI ร่างได้<br>คนเซ็นชื่อ<br>คือคนรับผิดชอบ</h2>
+  <div class="who">เอกสารที่เข้าระบบคุณภาพต้องผ่านคนตรวจเสมอ · นี่คือเรื่องที่ auditor จะถาม</div>
+</section>
+
+<section class="slide" data-sec="ทัวร์หน้าจอ">
+  <div class="kicker">ทัวร์หน้าจอ · 15 นาที</div>
+  <h2>มีอะไรอยู่บนหน้าจอบ้าง</h2>
+  <ul class="big">
+    <li><b>ช่องพิมพ์</b><span class="note">ขึ้นบรรทัดใหม่โดยไม่ส่ง · แนบไฟล์ · สั่งด้วยเสียง</span></li>
+    <li><b>แถบด้านซ้าย</b><span class="note">แชทใหม่ · ประวัติแชทเก่า · ค้นหาแชทที่เคยคุย · Projects</span></li>
+    <li><b>เครื่องมือในช่องพิมพ์</b><span class="note">แนบไฟล์ · ค้นเว็บ · โหมดคิดนาน</span></li>
+    <li><b>ตัวเลือกโมเดล</b><span class="note">ไม่ต้องจำชื่อ จำหลักว่า งานคิดเยอะเลือกตัวที่ช้ากว่า</span></li>
+    <li><b>หน้าตั้งค่า</b><span class="note">ภาษา และการตั้งค่าความเป็นส่วนตัวกับการนำข้อมูลไปฝึกโมเดล</span></li>
+  </ul>
+</section>
+
+<section class="slide divider" data-sec="M1">
+  <div class="kicker">โมดูลที่ 1</div>
+  <h2>คุยให้ได้งาน</h2>
+  <div class="sub">โจทย์: ลูกค้าที่ย่างกุ้งติดตามเรื่องเอกสารขึ้นทะเบียนมาเป็นครั้งที่ 3</div>
+  <div class="clock">09:40 – 10:35</div>
+</section>
+
+<section class="slide" data-sec="M1">
+  <div class="kicker">เทียบกันบนจอ</div>
+  <h2>คำสั่งเดียวกันคนละแบบ<br>ได้ของคนละอย่าง</h2>
+  <div class="prompt bad"><span class="lbl">แบบที่ทุกคนพิมพ์</span>ช่วยเขียนอีเมลขอโทษลูกค้า</div>
+  <div class="prompt good"><span class="lbl">แบบที่ได้งาน</span>ผมเป็นผู้บริหารโรงงานผลิตยา กำลังตอบตัวแทนจำหน่ายที่ย่างกุ้ง
+  เขาติดตามเรื่องเอกสารขึ้นทะเบียนมาเป็นครั้งที่ 3 แล้ว งานล่าช้าเพราะฝ่ายทะเบียนยาเรางานล้น
+  เอกสารจะพร้อมจริงเดือนกันยายน เขียนอีเมลภาษาอังกฤษไม่เกิน 200 คำ
+  โทนขอโทษแต่ไม่อ้อมค้อม ห้ามสัญญาวันที่ที่เรายังยืนยันไม่ได้ และห้ามโยนความผิดให้แผนกอื่น</div>
+</section>
+
+<section class="slide" data-sec="M1">
+  <div class="kicker">หลัก 4 ข้อ</div>
+  <h2>คำสั่งที่ได้งาน<br>มีของสี่อย่างนี้</h2>
+  <ol class="big">
+    <li><b>คุณเป็นใคร</b></li>
+    <li><b>บริบทที่คนนอกไม่รู้</b></li>
+    <li><b>รูปแบบผลลัพธ์ที่ต้องการ</b></li>
+    <li><b>ข้อห้าม</b></li>
+  </ol>
+</section>
+
+<section class="slide" data-sec="M1">
+  <div class="kicker">สิ่งที่คนทำผิดที่สุด</div>
+  <h2>ผลไม่ถูกใจ<br>อย่าเปิดแชทใหม่</h2>
+  <div class="prompt bad"><span class="lbl">ห้ามพูด</span>ไม่ดี ทำใหม่</div>
+  <div class="prompt good"><span class="lbl">พูดอย่างนี้</span>ย่อหน้าที่สองยังอ้อมเกินไป เขียนใหม่ให้ตรงกว่านี้ และตัดคำขอโทษให้เหลือประโยคเดียว</div>
+  <div class="callout"><b>เหตุผล</b> ถ้าไม่บอกว่าไม่ดีตรงไหน ก็จะได้ของที่ไม่ดีคนละแบบวนไปเรื่อยๆ</div>
+</section>
+
+<section class="slide divider" data-sec="M2">
+  <div class="kicker">โมดูลที่ 2</div>
+  <h2>ทำงานกับไฟล์</h2>
+  <div class="sub">โจทย์: ไตรมาส 3 ยอดตก เพราะอะไร</div>
+  <div class="clock">10:50 – 12:00</div>
+</section>
+
+<section class="slide" data-sec="M2">
+  <div class="kicker">ไฟล์ที่อัปโหลด</div>
+  <h2>ยอดขาย 720 แถว<br>ข้อร้องเรียน 80 รายการ<br>รายงานประชุม 10 หน้า</h2>
+  <p class="sub">คำถามเดียว: มีอะไรผิดปกติที่ผมควรรู้บ้าง และดูจากตัวเลขไหน</p>
+</section>
+
+<section class="slide" data-sec="M2">
+  <div class="kicker">คำตอบที่ตัวเลขยืนยันได้</div>
+  <h2>ยอดไม่ได้ตกเฉยๆ<br>มีช่องทางหนึ่งพังไปแล้ว</h2>
+  <div class="tw"><table>
+    <thead><tr><th>สิ่งที่เจอ</th><th>ตัวเลขยืนยัน</th></tr></thead>
+    <tbody>
+      <tr><td>ไตรมาส 3 ตกจากไตรมาส 2 ประมาณ 6%</td><td class="num">52.35 → 49.20 ล้านบาท</td></tr>
+      <tr><td>ช่องทางโรงพยาบาลรัฐร่วงตั้งแต่เดือนกรกฎาคม</td><td class="num">7.22 → 5.65 ล้านบาท</td></tr>
+      <tr><td>ยอดส่งออกที่โตขึ้นไปกลบไว้ครึ่งหนึ่ง</td><td class="num">2.69 → 3.63 ล้านบาท</td></tr>
+      <tr><td>Gentamicin เป็นศูนย์ในเดือนกันยายน</td><td class="num">ข้อร้องเรียน 7 รายการ · 3 รุ่นผลิตติดกัน</td></tr>
+    </tbody>
+  </table></div>
+  <div class="callout"><b>ถ้าดูแค่ยอดรวมรายเดือน จะเห็นแค่ว่าตกเล็กน้อย</b>
+  ต้องแยกตามช่องทางถึงจะเห็นว่ามีช่องทางหนึ่งพังไปแล้ว และต้องเปิดไฟล์ข้อร้องเรียนประกอบจึงจะรู้ว่าทำไม</div>
+</section>
+
+<section class="slide" data-sec="M2">
+  <div class="kicker">เอกสารกองโต</div>
+  <h2>อย่าสั่งว่า<br>“สรุปให้หน่อย”</h2>
+  <div class="prompt bad"><span class="lbl">ได้ย่อความ</span>สรุปรายงานประชุมฉบับนี้ให้หน่อย</div>
+  <div class="prompt good"><span class="lbl">ได้ของที่ใช้ตัดสินใจ</span>จากรายงานประชุมฉบับนี้ ช่วยแยกให้ผมว่าอะไรคือเรื่องที่ผมต้องตัดสินใจ
+  อะไรคือเรื่องที่รับทราบเฉยๆ และอะไรคือเรื่องที่เลยกำหนดแล้ว</div>
+</section>
+
+<section class="slide" data-sec="M2">
+  <div class="kicker">ลงมือ · 30 นาที</div>
+  <h2>เลือกโจทย์ที่ใกล้งานท่าน</h2>
+  <div class="two">
+    <div class="card"><span class="tag">โจทย์ ก · สายตัวเลข</span>
+      <h3>รายงานคณะกรรมการใน 3 ประโยค</h3>
+      <p>ถ้าท่านต้องอธิบายสาเหตุที่ยอดไตรมาส 3 ตก ให้คณะกรรมการฟังใน 3 ประโยค ท่านจะพูดว่าอะไร</p></div>
+    <div class="card"><span class="tag">โจทย์ ข · สายเอกสาร</span>
+      <h3>ประกาศใหม่ทำให้ต้องแก้ SOP ตรงไหน</h3>
+      <p>เทียบประกาศฉบับใหม่กับ SOP-QA-012 ที่ใช้อยู่ ตอบเป็นตารางเทียบข้อต่อข้อ</p></div>
+  </div>
+</section>
+
+<section class="slide" data-sec="M2">
+  <div class="kicker">สำคัญที่สุดของวัน</div>
+  <h2>วิธีจับผิด</h2>
+  <ol class="big">
+    <li><b>สั่งให้อ้างอิงเสมอ</b><span class="note">เอาตัวเลขนี้มาจากแถวไหน ข้อไหน หน้าไหน</span></li>
+    <li><b>เปิดไฟล์ตรวจจริงหนึ่งจุด</b><span class="note">ทุกครั้งที่จะเอาตัวเลขไปใช้ต่อ</span></li>
+    <li><b>ถามซ้ำด้วยมุมที่ต่าง</b><span class="note">มีคำอธิบายอื่นที่เป็นไปได้อีกไหม — ถ้าคำตอบเปลี่ยนไปมา ยังเชื่อไม่ได้</span></li>
+    <li><b>งานที่ตรวจไม่ได้ ไม่ใช้</b></li>
+  </ol>
+</section>
+
+<section class="slide statement" data-sec="M2">
+  <h2>มันช่วยให้ท่าน<br>อ่านของ 10 หน้าจบใน 2 นาที<br><br>แต่ไม่ได้ช่วยให้ท่าน<br>ไม่ต้องรับผิดชอบ<br>สิ่งที่เซ็นชื่อ</h2>
+</section>
+
+<section class="slide divider" data-sec="M3">
+  <div class="kicker">โมดูลที่ 3</div>
+  <h2>สร้างไฟล์ออกมาจริง</h2>
+  <div class="sub">ไม่ได้จบที่คำตอบในหน้าจอ แต่ออกมาเป็นไฟล์ที่เอาเข้าที่ประชุมได้เลย</div>
+  <div class="clock">13:00 – 14:00</div>
+</section>
+
+<section class="slide" data-sec="M3">
+  <div class="kicker">สั่งครั้งเดียว แก้ต่อได้เรื่อยๆ</div>
+  <h2>ไม่ต้องเริ่มใหม่<br>ทุกครั้งที่อยากแก้</h2>
+  <div class="prompt good"><span class="lbl">สั่งครั้งแรก</span>จากสองไฟล์นี้ ทำสไลด์สรุปผลประกอบการไตรมาส 3 ให้ผม 5 หน้า
+  สำหรับเสนอคณะกรรมการ หน้าแรกเป็นข้อสรุป ไม่ใช่ที่มา</div>
+  <ul class="big">
+    <li>เพิ่มหน้าเรื่องกำไรขั้นต้นแยกตามช่องทาง</li>
+    <li>เปลี่ยนหน้าที่ 3 ให้เป็นตารางแทนกราฟ</li>
+    <li>ทำเป็นไฟล์ Excel ให้ผมอีกอันหนึ่ง</li>
+  </ul>
+</section>
+
+<section class="slide" data-sec="M3">
+  <div class="kicker">คำถามที่ผู้บริหารต้องถาม</div>
+  <h2>ยอดขายฟื้นแล้ว<br>กำไรฟื้นด้วยไหม</h2>
+  <div class="tw"><table>
+    <thead><tr><th>ช่องทางจำหน่าย</th><th>ราคาเทียบราคาอ้างอิง</th><th>ผลต่อกำไร</th></tr></thead>
+    <tbody>
+      <tr><td>โรงพยาบาลเอกชน</td><td class="num">105%</td><td>กำไรต่อหน่วยสูงสุด</td></tr>
+      <tr><td>ร้านขายยา</td><td class="num">100%</td><td>ตามราคาอ้างอิง</td></tr>
+      <tr><td>โรงพยาบาลรัฐ</td><td class="num">90%</td><td>ต่ำกว่า เพราะได้จากการประมูล</td></tr>
+      <tr><td>ส่งออก</td><td class="num">78%</td><td>ต่ำสุด แลกกับปริมาณต่อคำสั่งซื้อ</td></tr>
+    </tbody>
+  </table></div>
+  <div class="callout"><b>ยอดที่โตมาจากช่องทางส่งออก</b> กำไรขั้นต้นจึงลดจาก 39% เหลือ 37% ทั้งที่ยอดขายโตขึ้น
+  — ยอดขายอย่างเดียวเล่าเรื่องไม่ครบ</div>
+</section>
+
+<section class="slide divider" data-sec="M4">
+  <div class="kicker">โมดูลที่ 4 · หัวใจของวันนี้</div>
+  <h2>สร้าง Project<br>ของงานตัวเอง</h2>
+  <div class="sub">จบช่วงนี้ ทุกท่านจะมีของที่ใช้ได้จริงวันจันทร์</div>
+  <div class="clock">14:00 – 15:10</div>
+</section>
+
+<section class="slide" data-sec="M4">
+  <div class="kicker">Project คืออะไร</div>
+  <h2>พื้นที่งานที่รู้เรื่องเราแล้ว<br>ไม่ต้องอธิบายใหม่ทุกครั้ง</h2>
+  <div class="two">
+    <div class="card"><span class="tag">ตอนเช้าเราทำแบบนี้</span>
+      <h3>พิมพ์บริบทใหม่ทุกครั้ง</h3>
+      <p>ทุกแชทต้องเล่าใหม่ว่าบริษัทเราทำอะไร ขายให้ใคร ต้องการงานหน้าตาแบบไหน</p></div>
+    <div class="card"><span class="tag">ใน Project</span>
+      <h3>ใส่ไว้ครั้งเดียว</h3>
+      <p>คำสั่งประจำโปรเจกต์ + ไฟล์อ้างอิงที่ใช้ซ้ำ ถามคำถามได้เลย ไม่ต้องเล่าใหม่</p></div>
+  </div>
+</section>
+
+<section class="slide" data-sec="M4">
+  <div class="kicker">ก่อนใส่อะไรลง Project</div>
+  <h2>Project เก็บไฟล์ค้างไว้<br>ความเสี่ยงสูงกว่าแชท</h2>
+  <div class="two">
+    <div class="card"><span class="tag">ใส่ได้</span>
+      <h3>บริบทและรูปแบบ</h3>
+      <p>บริบทธุรกิจ · โทนการเขียน · โครงเอกสารมาตรฐาน · ตัวอย่างงานที่ไม่มีข้อมูลลับ</p></div>
+    <div class="card"><span class="tag">ห้ามใส่</span>
+      <h3>ทุกอย่างในถังแดง</h3>
+      <p>เอกสารระบบคุณภาพฉบับจริง · ข้อมูลทะเบียนยา · batch record · ผล stability · ข้อมูลผู้ป่วย</p></div>
+  </div>
+</section>
+
+<section class="slide" data-sec="M4">
+  <div class="kicker">ลงมือ · 35 นาที</div>
+  <h2>กรอกใบงานก่อน<br>แล้วค่อยเปิดหน้าจอ</h2>
+  <ol class="big">
+    <li><b>เลือกงานจากลิสต์บนบอร์ดตอนเช้า</b><span class="note">งานที่ทำซ้ำทุกสัปดาห์ และเล็กพอจะเสร็จใน 35 นาที</span></li>
+    <li><b>เขียนคำสั่งประจำโปรเจกต์ 4 ส่วน</b><span class="note">บทบาท · บริบทบริษัท · รูปแบบผลลัพธ์ · ข้อห้าม</span></li>
+    <li><b>ใส่ไฟล์อ้างอิง หลังตรวจกติกา 3 ถังแล้ว</b></li>
+    <li><b>ทดสอบด้วยคำถามจริง 3 ข้อ</b><span class="note">ยังไม่นับว่าเสร็จ จนกว่าจะทดสอบครบและผลใช้ได้</span></li>
+  </ol>
+</section>
+
+<section class="slide divider" data-sec="ปิดวง">
+  <div class="kicker">ช่วงสุดท้าย</div>
+  <h2>แล้วบริษัทเรา<br>ควรเอาเข้ามาไหม</h2>
+  <div class="clock">15:45 – 16:30</div>
+</section>
+
+<section class="slide" data-sec="ปิดวง">
+  <div class="kicker">พูดข้อจำกัดก่อน</div>
+  <h2>สิ่งที่มันทำไม่ได้</h2>
+  <ul class="big">
+    <li><b>มันตอบผิดได้อย่างมั่นใจ</b><span class="note">งานที่ตรวจไม่ได้ ก็ไม่ควรใช้</span></li>
+    <li><b>มันไม่รู้เรื่องภายในบริษัทเรา</b><span class="note">นอกจากที่เราบอก หรือใส่ไฟล์ให้</span></li>
+    <li><b>มันไม่แทนการตัดสินใจ และไม่แทนการลงนาม</b></li>
+    <li><b>งานที่ต้องแม่นทุกหลัก ต้องตรวจด้วยมือทุกครั้ง</b></li>
+  </ul>
+  <div class="callout"><b>เปรียบเทียบที่ตรงที่สุด</b> ผู้ช่วยใหม่ที่ขยันมากและอ่านเร็วมาก
+  แต่เพิ่งเข้างานวันแรกและไม่รู้เรื่องบริษัทเรา — งานที่ผู้ช่วยใหม่ทำ เราตรวจก่อนเซ็นทุกครั้ง</div>
+</section>
+
+<section class="slide" data-sec="ปิดวง">
+  <div class="kicker">ห้าคำถามที่ต้องมีคำตอบ</div>
+  <h2>ก่อนผลักเรื่องนี้ต่อในองค์กร</h2>
+  <ol class="big">
+    <li><b>ข้อมูลที่เราพิมพ์เข้าไป จะถูกเอาไปใช้ฝึกโมเดลไหม</b></li>
+    <li><b>ถ้าเอามาใช้ทั้งบริษัท ต้องจ่ายเท่าไหร่</b></li>
+    <li><b>IT จะควบคุมได้แค่ไหน ดูได้ไหมว่าใครใช้อะไร</b></li>
+    <li><b>ถ้า auditor ถามว่าใช้ AI ทำเอกสารไหม เราตอบว่าอะไร</b></li>
+    <li><b>เราจะรู้ได้ยังไงว่าที่มันตอบถูก</b></li>
+  </ol>
+</section>
+
+<section class="slide" data-sec="ปิดวง">
+  <div class="kicker">ถ้าจะขยายไปทั้งองค์กร</div>
+  <h2>ลำดับที่ทำได้ในหนึ่งไตรมาส</h2>
+  <ol class="big">
+    <li><b>เขียนกติกา 3 ถังให้เป็นลายลักษณ์อักษร</b><span class="note">รายงานประชุมวาระที่ 8 มอบหมายไว้แล้ว ใช้ของวันนี้เป็นตัวตั้งได้</span></li>
+    <li><b>เลือกกลุ่มนำร่อง 1 ฝ่ายที่งานไม่แตะข้อมูล GxP</b><span class="note">เช่นงานเอกสารโต้ตอบลูกค้าต่างประเทศ</span></li>
+    <li><b>ย้ายกลุ่มนำร่องไปใช้แผนสำหรับองค์กร</b><span class="note">เพื่อให้ IT จัดการสมาชิกและตั้งค่าได้</span></li>
+    <li><b>วัดผลด้วยเวลาที่ประหยัดได้จริง</b><span class="note">ไม่ใช่วัดด้วยจำนวนคนที่สมัคร</span></li>
+  </ol>
+</section>
+
+<section class="slide" data-sec="ปิดวง">
+  <div class="kicker">รอบคำมั่น · 15 นาที</div>
+  <h2>สองคำถาม<br>พูดออกมาให้เพื่อนฟัง</h2>
+  <ol class="big">
+    <li><b>จะเอาไปลองกับงานอะไร ภายใน 2 สัปดาห์</b></li>
+    <li><b>จะให้ใครในทีมดูผลงานนั้น</b></li>
+  </ol>
+  <div class="callout"><b>ทำไมต้องพูดออกเสียง</b> เพราะสิ่งที่กันไม่ให้เรื่องนี้หล่นจากโต๊ะ
+  ไม่ใช่เอกสารนโยบาย แต่คือการพูดต่อหน้ากันเอง</div>
+</section>
+
+<section class="slide title" data-sec="จบ">
+  <div class="kicker">ขอบคุณครับ</div>
+  <h1>เริ่มวันจันทร์<br>ด้วยงานเดียว</h1>
+  <div class="org">งานที่ท่านเพิ่งทำ Project ไว้ — เปิดขึ้นมาใช้ ไม่ต้องเริ่มใหม่</div>
+  <dl class="meta">
+    <div><dt>ใบงานและใบสรุป</dt><dd>เอากลับไปได้เลย</dd></div>
+    <div><dt>ไฟล์ฝึกหัด</dt><dd>ข้อมูลสมมติ ใช้ซ้ำได้</dd></div>
+    <div><dt>สิ่งที่ต้องจำ</dt><dd>AI ร่างได้ คนเซ็นชื่อรับผิดชอบ</dd></div>
+  </dl>
+</section>
+
+</div>
+
+<div class="track" id="track"></div>
+<div class="hint">← → เปลี่ยนสไลด์</div>
+<nav class="bar" aria-label="ควบคุมสไลด์">
+  <span class="doc">ใช้ AI ทำงานจริงด้วย Claude · ที.พี. ดรัก แลบบอราทอรี่ (1969)</span>
+  <span class="spacer"></span>
+  <span class="where" id="where"></span>
+  <button type="button" id="prev" aria-label="สไลด์ก่อนหน้า">←  ก่อนหน้า</button>
+  <button type="button" id="next" aria-label="สไลด์ถัดไป">ถัดไป  →</button>
+  <span class="count" id="count"></span>
+</nav>
+
+<script>
+(function(){
+  var root=document.documentElement;
+  root.className+=' js';
+  var slides=[].slice.call(document.querySelectorAll('.slide'));
+  var i=0, total=slides.length;
+  var where=document.getElementById('where');
+  var count=document.getElementById('count');
+  var track=document.getElementById('track');
+
+  function show(n){
+    i=Math.max(0,Math.min(total-1,n));
+    slides.forEach(function(s,k){ s.classList.toggle('on', k===i); });
+    where.textContent=slides[i].getAttribute('data-sec')||'';
+    count.textContent=(i+1)+' / '+total;
+    track.style.width=((i+1)/total*100)+'%';
+    window.scrollTo(0,0);
+    try{ location.hash='s'+(i+1); }catch(e){}
+  }
+  document.getElementById('prev').addEventListener('click',function(){show(i-1)});
+  document.getElementById('next').addEventListener('click',function(){show(i+1)});
+  document.addEventListener('keydown',function(e){
+    if(e.target.tagName==='BUTTON'&&(e.key===' '||e.key==='Enter')) return;
+    if(e.key==='ArrowRight'||e.key==='PageDown'||e.key===' '){e.preventDefault();show(i+1)}
+    else if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();show(i-1)}
+    else if(e.key==='Home'){e.preventDefault();show(0)}
+    else if(e.key==='End'){e.preventDefault();show(total-1)}
+  });
+  var x0=null;
+  document.addEventListener('touchstart',function(e){x0=e.touches[0].clientX},{passive:true});
+  document.addEventListener('touchend',function(e){
+    if(x0===null) return;
+    var dx=e.changedTouches[0].clientX-x0;
+    if(Math.abs(dx)>60) show(dx<0?i+1:i-1);
+    x0=null;
+  },{passive:true});
+
+  var m=/^#s(\d+)$/.exec(location.hash||'');
+  show(m?parseInt(m[1],10)-1:0);
+})();
+</script>

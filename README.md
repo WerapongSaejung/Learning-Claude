@@ -29,3 +29,24 @@
 pip install openpyxl python-docx
 python3 scripts/gen_dataset.py
 ```
+
+## หน้าเว็บ 3 หน้าใน `site/`
+
+| ไฟล์ | คนดู | ใช้ตอนไหน |
+|---|---|---|
+| `slides.html` | ทุกคนในห้อง | ฉายขึ้นจอ 30 สไลด์ · เปลี่ยนสไลด์ด้วยปุ่มลูกศร เว้นวรรค หรือปัดนิ้ว |
+| `facilitator-guide.html` | **วิทยากรเท่านั้น** | เปิดบนโน้ตบุ๊กระหว่างสอน · สคริปต์รายช่วง คำถามที่เตรียมตอบ แผนสำรอง |
+| `participant-pack.html` | ผู้เรียน | ใบงาน 4 โมดูล + เทมเพลต Project + ใบสรุป 1 หน้า · พิมพ์ออกกระดาษได้ |
+
+> `facilitator-guide.html` มีสคริปต์ คำถามที่จะโยน และคำตอบที่เตรียมไว้ **อย่าแชร์ให้ผู้เรียน**
+
+## สร้าง dataset ขึ้นใหม่ (ปรับปรุงจากส่วนบน)
+
+```bash
+pip install openpyxl python-docx
+python3 scripts/gen_dataset.py     # Excel 3 ไฟล์
+python3 scripts/gen_documents.py   # docx/pdf 4 ไฟล์ (ต้องมี LibreOffice พร้อม Writer)
+```
+
+ไฟล์ Excel ที่มีสูตรต้องรัน recalculate หลัง generate เพื่อฝังค่าที่คำนวณแล้วลงไฟล์
+ไม่งั้นเครื่องมือที่อ่านค่าจากไฟล์จะเห็นช่องว่างเปล่าแทนตัวเลข

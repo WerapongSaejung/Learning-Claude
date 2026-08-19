@@ -1,0 +1,412 @@
+<title>ใบงานผู้เรียน ที.พี.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sarabun:ital,wght@0,400;0,600;0,700;1,400&family=IBM+Plex+Sans+Thai:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+:root{
+  --ground:#F7F8F6; --surface:#FFFFFF; --surface-2:#EFF2EE;
+  --ink:#14201C; --ink-2:#42544C; --ink-3:#6E7E76;
+  --line:#D5DCD6; --line-2:#C0CAC2; --rule:#AEBAB2;
+  --accent:#0E5C4A; --accent-soft:#E4EFE9; --accent-ink:#0B4A3C;
+  --hold:#B7791F; --hold-soft:#FBF1DE;
+  --stop:#A62A21; --stop-soft:#FAE8E6;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --ground:#0F1512; --surface:#161E1A; --surface-2:#1D2620;
+    --ink:#E7EDE9; --ink-2:#A9B8B0; --ink-3:#7F8F87;
+    --line:#2A352E; --line-2:#3A473F; --rule:#46554C;
+    --accent:#4FBF9F; --accent-soft:#152A23; --accent-ink:#7FD6BC;
+    --hold:#DBA23F; --hold-soft:#2B2216;
+    --stop:#E0776C; --stop-soft:#2E1A18;
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#0F1512; --surface:#161E1A; --surface-2:#1D2620;
+  --ink:#E7EDE9; --ink-2:#A9B8B0; --ink-3:#7F8F87;
+  --line:#2A352E; --line-2:#3A473F; --rule:#46554C;
+  --accent:#4FBF9F; --accent-soft:#152A23; --accent-ink:#7FD6BC;
+  --hold:#DBA23F; --hold-soft:#2B2216;
+  --stop:#E0776C; --stop-soft:#2E1A18;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;background:var(--ground);color:var(--ink);
+  font-family:Sarabun,"Noto Sans Thai",system-ui,sans-serif;
+  font-size:16px;line-height:1.7;-webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:860px;margin:0 auto;padding:0 24px 88px}
+h1,h2,h3,h4{font-family:"IBM Plex Sans Thai",Sarabun,sans-serif;margin:0;text-wrap:balance}
+.mono{font-family:"IBM Plex Mono",ui-monospace,monospace;font-variant-numeric:tabular-nums}
+p{margin:0 0 12px;max-width:66ch}
+a{color:var(--accent-ink)}
+
+header{border-bottom:2px solid var(--ink);padding:40px 0 22px}
+.eyebrow{font-family:"IBM Plex Mono",monospace;font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3)}
+h1{font-size:clamp(27px,4.2vw,40px);font-weight:700;line-height:1.2;margin:10px 0 8px;letter-spacing:-.01em}
+header p{color:var(--ink-2);font-size:16.5px}
+.nameline{display:flex;flex-wrap:wrap;gap:26px;margin-top:20px}
+.nameline label{flex:1 1 220px;font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}
+.nameline span{display:block;border-bottom:1px solid var(--rule);height:30px;margin-top:2px}
+
+h2.mod{
+  display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;
+  margin:56px 0 6px;padding-bottom:10px;border-bottom:1px solid var(--line);
+}
+h2.mod .no{
+  font-family:"IBM Plex Mono",monospace;font-size:12px;font-weight:600;letter-spacing:.1em;
+  background:var(--accent);color:var(--ground);padding:4px 9px;border-radius:2px;flex:none;
+}
+h2.mod .t{font-size:24px;font-weight:600}
+h2.mod .clock{font-family:"IBM Plex Mono",monospace;font-size:13px;color:var(--ink-3);margin-left:auto}
+.lead{color:var(--ink-2);font-size:15.5px;margin:0 0 20px}
+
+h3{font-size:18px;font-weight:600;margin:26px 0 8px}
+h4{font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);font-family:"IBM Plex Mono",monospace;font-weight:600;margin:20px 0 8px}
+ul,ol{margin:0 0 14px;padding-left:22px}
+li{margin-bottom:5px;max-width:64ch}
+code{font-family:"IBM Plex Mono",monospace;font-size:.9em;background:var(--surface-2);border:1px solid var(--line);padding:1px 5px;border-radius:2px}
+
+/* ---------- แบบฟอร์มกรอก: เส้นบรรทัดจริงแบบใบบันทึก ---------- */
+.form{border:1px solid var(--line-2);background:var(--surface);padding:0}
+.form > .fh{
+  background:var(--surface-2);border-bottom:1px solid var(--line-2);
+  padding:11px 16px;font-family:"IBM Plex Sans Thai",sans-serif;font-weight:600;font-size:15px;
+  display:flex;justify-content:space-between;gap:12px;align-items:baseline;
+}
+.form > .fh .code{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--ink-3);letter-spacing:.08em}
+.field{padding:13px 16px;border-bottom:1px solid var(--line)}
+.field:last-child{border-bottom:none}
+.field > .q{font-size:14.5px;font-weight:600;margin-bottom:2px}
+.field > .hint{font-size:13.5px;color:var(--ink-3);margin-bottom:8px}
+.rules{display:block}
+.rules i{display:block;border-bottom:1px solid var(--rule);height:29px}
+.rules i:last-child{margin-bottom:0}
+.rules.tall i{height:31px}
+
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:0;border-bottom:1px solid var(--line)}
+.grid2 > div{padding:13px 16px;border-right:1px solid var(--line)}
+.grid2 > div:last-child{border-right:none}
+.grid2:last-child{border-bottom:none}
+
+.checkline{display:flex;gap:10px;align-items:flex-start;margin-bottom:7px;font-size:14.5px}
+.checkline::before{content:"";flex:none;width:15px;height:15px;border:1.5px solid var(--line-2);border-radius:2px;margin-top:5px}
+
+/* ---------- ตาราง ---------- */
+.tw{overflow-x:auto;border:1px solid var(--line);background:var(--surface);margin:0 0 16px}
+table{border-collapse:collapse;width:100%;font-size:14.5px;min-width:480px}
+th{text-align:left;font-family:"IBM Plex Sans Thai",sans-serif;font-weight:600;font-size:12.5px;padding:10px 13px;background:var(--surface-2);border-bottom:1px solid var(--line-2);white-space:nowrap}
+td{padding:10px 13px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border-bottom:none}
+.bucket{display:inline-flex;align-items:center;gap:7px;font-weight:600;white-space:nowrap}
+.dot{width:11px;height:11px;border-radius:50%;flex:none}
+.dot.r{background:var(--stop)}.dot.a{background:var(--hold)}.dot.g{background:var(--accent)}
+
+.note{border-left:4px solid var(--accent);background:var(--accent-soft);padding:12px 16px;font-size:15px;margin:16px 0}
+.alert{border-left:4px solid var(--stop);background:var(--stop-soft);padding:12px 16px;font-size:15px;margin:16px 0}
+.alert b{color:var(--stop)}
+
+/* ---------- ใบสรุปกลับบ้าน ---------- */
+.cheat{border:2px solid var(--ink);background:var(--surface);margin-top:20px}
+.cheat > h2{
+  background:var(--ink);color:var(--ground);padding:14px 20px;font-size:19px;font-weight:600;
+  display:flex;justify-content:space-between;gap:12px;align-items:baseline;flex-wrap:wrap;
+}
+.cheat > h2 span{font-family:"IBM Plex Mono",monospace;font-size:11.5px;letter-spacing:.1em;opacity:.75}
+.cheat .inner{padding:22px 20px 8px}
+.cheat h3{margin-top:0}
+.cbox{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:0;border-top:1px solid var(--line)}
+.cbox > div{padding:16px 18px;border-right:1px solid var(--line);border-bottom:1px solid var(--line)}
+.cbox > div:last-child{border-right:none}
+.cbox h4{margin-top:0}
+.cbox ol,.cbox ul{padding-left:19px;margin-bottom:0}
+.cbox li{font-size:14.5px;margin-bottom:5px}
+
+footer{margin-top:64px;padding-top:18px;border-top:2px solid var(--ink);font-size:13.5px;color:var(--ink-3)}
+@media (max-width:640px){
+  .grid2{grid-template-columns:1fr}
+  .grid2 > div{border-right:none;border-bottom:1px solid var(--line)}
+  .grid2 > div:last-child{border-bottom:none}
+}
+@media print{
+  body{background:#fff;font-size:11pt}
+  .wrap{max-width:none;padding:0}
+  h2.mod{break-after:avoid} .form,.cheat,.tw{break-inside:avoid}
+  .cheat{break-before:page}
+}
+</style>
+
+<div class="wrap">
+<header>
+  <div class="eyebrow">ใบงานผู้เรียน · หลักสูตรเต็มวัน</div>
+  <h1>ใช้ AI ทำงานจริงด้วย Claude</h1>
+  <p>ใบงานนี้ใช้ระหว่างอบรม และหน้าสุดท้ายเป็นใบสรุปที่เอากลับไปใช้ต่อได้
+  เป้าหมายของวันนี้คือ จบวันแล้วท่านมี Claude Project ของงานตัวเอง 1 ชิ้น ที่ใช้ได้จริงวันจันทร์</p>
+  <div class="nameline">
+    <label>ชื่อผู้เรียน<span></span></label>
+    <label>สายงาน<span></span></label>
+    <label>วันที่<span></span></label>
+  </div>
+</header>
+
+<h2 class="mod"><span class="no">กติกา</span><span class="t">ข้อมูลอะไรใส่ได้ ใส่ไม่ได้</span><span class="clock">09:15</span></h2>
+<p class="lead">อ่านก่อนเริ่มทุกกิจกรรม วันนี้เราใช้ไฟล์สมมติทั้งหมด ไม่ต้องนำข้อมูลจริงของบริษัทมาใช้</p>
+<div class="tw"><table>
+  <thead><tr><th>ถัง</th><th>ตัวอย่างในงานของเรา</th><th>ทำได้ไหม</th></tr></thead>
+  <tbody>
+    <tr><td><span class="bucket"><span class="dot r"></span>ห้ามเด็ดขาด</span></td>
+      <td>สูตรตำรับ · ข้อมูลทะเบียนยาและ DMF · batch record · ผล stability · ข้อมูลผู้ป่วยที่ระบุตัวได้</td>
+      <td>ห้ามพิมพ์ ห้ามอัปโหลด บนบัญชีส่วนตัว</td></tr>
+    <tr><td><span class="bucket"><span class="dot a"></span>ตัดข้อมูลระบุตัวก่อน</span></td>
+      <td>ยอดขายรายลูกค้า · ทะเบียนข้อร้องเรียน · ราคาซัพพลายเออร์ · ชื่อตัวแทนจำหน่าย</td>
+      <td>ลบชื่อและรหัสจริงออกก่อน</td></tr>
+    <tr><td><span class="bucket"><span class="dot g"></span>ใส่ได้</span></td>
+      <td>ประกาศและหลักเกณฑ์ที่เผยแพร่สาธารณะ · ร่างงานเขียนทั่วไป · ข้อมูลที่ไม่ระบุตัวตน</td>
+      <td>ได้เลย</td></tr>
+  </tbody>
+</table></div>
+<div class="alert"><b>AI ร่างได้ คนเซ็นชื่อคือคนรับผิดชอบ</b><br>
+เอกสารที่จะเข้าระบบคุณภาพต้องผ่านการตรวจและอนุมัติตามระบบเดิมทุกขั้นตอน ไม่มีข้อยกเว้น</div>
+
+<h2 class="mod"><span class="no">M1</span><span class="t">คุยให้ได้งาน</span><span class="clock">09:40 – 10:35</span></h2>
+<p class="lead">โจทย์: ร่างอีเมลตอบลูกค้าตัวแทนจำหน่ายที่ย่างกุ้ง ซึ่งติดตามเรื่องเอกสารขึ้นทะเบียนมาเป็นครั้งที่ 3
+ใช้ไฟล์ <code>TP-06-export-customer-emails.docx</code> อ่าน Message 1 of 8 ให้จบก่อนเริ่ม</p>
+
+<h3>หลัก 4 ข้อของคำสั่งที่ได้งาน</h3>
+<div class="tw"><table>
+  <thead><tr><th>ข้อ</th><th>บอกอะไร</th><th>ตัวอย่างในโจทย์นี้</th></tr></thead>
+  <tbody>
+    <tr><td class="mono">1</td><td>คุณเป็นใคร</td><td>ผู้บริหารโรงงานผลิตยา กำลังตอบตัวแทนจำหน่ายต่างประเทศ</td></tr>
+    <tr><td class="mono">2</td><td>บริบทที่คนนอกไม่รู้</td><td>เขาติดตามมา 3 ครั้ง งานล่าช้าเพราะฝ่ายทะเบียนยางานล้น เอกสารพร้อมจริงเดือนกันยายน</td></tr>
+    <tr><td class="mono">3</td><td>รูปแบบผลลัพธ์</td><td>อีเมลภาษาอังกฤษ ไม่เกิน 200 คำ โทนขอโทษแต่ไม่อ้อมค้อม</td></tr>
+    <tr><td class="mono">4</td><td>ข้อห้าม</td><td>ห้ามสัญญาวันที่ที่ยังยืนยันไม่ได้ ห้ามโยนความผิดให้แผนกอื่น</td></tr>
+  </tbody>
+</table></div>
+
+<div class="form">
+  <div class="fh"><span>ใบงาน M1 · คำสั่งที่ท่านเขียน</span><span class="code">WS-M1</span></div>
+  <div class="field">
+    <div class="q">ลูกค้าฉบับนี้ขออะไรจากเราจริงๆ</div>
+    <div class="hint">อ่านให้จบก่อนตอบ ข้อนี้คือกับดักของโจทย์</div>
+    <div class="rules"><i></i><i></i></div>
+  </div>
+  <div class="field">
+    <div class="q">คำสั่งที่ท่านพิมพ์ครั้งแรก</div>
+    <div class="rules tall"><i></i><i></i><i></i><i></i><i></i></div>
+  </div>
+  <div class="field">
+    <div class="q">อ่านผลที่ได้แล้ว ไม่พอใจตรงไหน และท่านสั่งแก้ต่อว่าอะไร</div>
+    <div class="hint">ห้ามเขียนว่า “ไม่ดี ทำใหม่” ต้องบอกว่าไม่ดีตรงไหน</div>
+    <div class="rules tall"><i></i><i></i><i></i><i></i></div>
+  </div>
+  <div class="field">
+    <div class="q">รอบที่สอง แก้อะไรอีก</div>
+    <div class="rules tall"><i></i><i></i><i></i></div>
+  </div>
+</div>
+
+<h2 class="mod"><span class="no">M2</span><span class="t">ทำงานกับไฟล์</span><span class="clock">10:50 – 12:00</span></h2>
+<p class="lead">เลือกทำโจทย์ ก หรือ ข อย่างใดอย่างหนึ่ง</p>
+
+<div class="tw"><table>
+  <thead><tr><th>โจทย์</th><th>ไฟล์ที่ใช้</th><th>สิ่งที่ต้องส่งมอบ</th></tr></thead>
+  <tbody>
+    <tr><td><b>ก · สายตัวเลข</b></td>
+      <td class="mono">TP-01-sales-monthly.xlsx<br>TP-03-complaint-log.xlsx</td>
+      <td>ถ้าท่านต้องรายงานสาเหตุที่ยอดไตรมาส 3 ตกให้คณะกรรมการฟังใน 3 ประโยค ท่านจะพูดว่าอะไร</td></tr>
+    <tr><td><b>ข · สายเอกสาร</b></td>
+      <td class="mono">TP-05-regulatory-notice.pdf<br>TP-07-sop-complaint-handling.pdf</td>
+      <td>ประกาศฉบับนี้ทำให้เราต้องแก้ SOP-QA-012 ตรงไหน ตอบเป็นตารางเทียบข้อต่อข้อ</td></tr>
+  </tbody>
+</table></div>
+
+<div class="form">
+  <div class="fh"><span>ใบงาน M2 · คำตอบและการตรวจสอบ</span><span class="code">WS-M2</span></div>
+  <div class="field">
+    <div class="q">คำตอบที่ท่านได้ สรุปด้วยคำของท่านเอง</div>
+    <div class="rules tall"><i></i><i></i><i></i><i></i><i></i></div>
+  </div>
+  <div class="field">
+    <div class="q">ท่านตรวจคำตอบนี้อย่างไร</div>
+    <div class="hint">คำตอบที่ตรวจไม่ได้ ห้ามนำไปใช้ต่อ</div>
+    <div class="checkline">สั่งให้อ้างอิงว่าเอาตัวเลขหรือข้อความมาจากแถวไหน ข้อไหน หน้าไหน</div>
+    <div class="checkline">เปิดไฟล์ต้นทางตรวจจริงอย่างน้อย 1 จุด — จุดที่ตรวจคือ ______________________</div>
+    <div class="checkline">ถามซ้ำด้วยมุมที่ต่าง เช่น “มีคำอธิบายอื่นที่เป็นไปได้อีกไหม”</div>
+    <div class="checkline">คำตอบยังเหมือนเดิมหลังถามซ้ำ</div>
+  </div>
+  <div class="field">
+    <div class="q">มีตรงไหนที่มันตอบผิด หรือตอบไม่ตรงคำถาม</div>
+    <div class="hint">ถ้าไม่เจอเลย ให้ลองถามคำถามที่ยากขึ้นอีกข้อ</div>
+    <div class="rules"><i></i><i></i></div>
+  </div>
+</div>
+
+<h2 class="mod"><span class="no">M3</span><span class="t">สร้างไฟล์ออกมาจริง</span><span class="clock">13:00 – 14:00</span></h2>
+<p class="lead">โจทย์: ทำสรุปผู้บริหาร 1 หน้า จาก <code>TP-01-sales-monthly.xlsx</code> +
+<code>TP-02-product-cost.xlsx</code> ในรูปแบบที่ท่านจะใช้จริง</p>
+
+<div class="form">
+  <div class="fh"><span>ใบงาน M3 · ผลลัพธ์ที่ได้</span><span class="code">WS-M3</span></div>
+  <div class="grid2">
+    <div>
+      <div class="q">ท่านสั่งให้ทำออกมาเป็นอะไร</div>
+      <div class="hint">สไลด์ · เอกสาร · ไฟล์ Excel · อื่น ๆ</div>
+      <div class="rules"><i></i><i></i></div>
+    </div>
+    <div>
+      <div class="q">สั่งแก้ต่อกี่รอบ แก้อะไร</div>
+      <div class="rules"><i></i><i></i></div>
+    </div>
+  </div>
+  <div class="field">
+    <div class="q">ยอดขายไตรมาส 4 ฟื้นขึ้น — แล้วกำไรฟื้นด้วยไหม เพราะอะไร</div>
+    <div class="hint">ดูชีต “ตัวคูณราคาตามช่องทาง” ใน TP-02 ประกอบ</div>
+    <div class="rules"><i></i><i></i><i></i></div>
+  </div>
+  <div class="field">
+    <div class="q">ตัวเลขที่ท่านเปิดตรวจเทียบกับไฟล์ต้นทาง</div>
+    <div class="hint">ไฟล์สวยไม่ได้แปลว่าตัวเลขถูก</div>
+    <div class="checkline">ตรวจแล้ว ตรงกับไฟล์ต้นทาง</div>
+    <div class="checkline">ตรวจแล้ว ไม่ตรง — ต่างกันที่ ______________________________</div>
+  </div>
+</div>
+
+<h2 class="mod"><span class="no">M4</span><span class="t">สร้าง Project ของงานตัวเอง</span><span class="clock">14:00 – 15:10</span></h2>
+<p class="lead">นี่คือชิ้นงานที่ท่านจะเอากลับไปใช้จริง เลือกงานจากที่ท่านบอกไว้ตอนเช้าบนไวท์บอร์ด
+กรอกแบบฟอร์มนี้ก่อนเปิดหน้าจอ จะเร็วกว่านั่งคิดไปพิมพ์ไป</p>
+
+<div class="note">เลือกงานที่ <b>ทำซ้ำทุกสัปดาห์หรือทุกเดือน</b> และ <b>เล็กพอจะทำเสร็จใน 35 นาที</b>
+ถ้างานใหญ่เกิน ให้หั่นเอาแค่ส่วนที่ทำซ้ำมาก่อน</div>
+
+<div class="form">
+  <div class="fh"><span>เทมเพลต Project</span><span class="code">WS-M4 · หน้า 1</span></div>
+  <div class="field">
+    <div class="q">1 · ชื่อ Project</div>
+    <div class="hint">ตั้งชื่อตามงาน ไม่ใช่ตามเครื่องมือ เช่น “สรุปยอดขายรายเดือนเสนอที่ประชุม”</div>
+    <div class="rules"><i></i></div>
+  </div>
+  <div class="grid2">
+    <div>
+      <div class="q">2 · งานนี้คืออะไร</div>
+      <div class="rules"><i></i><i></i><i></i></div>
+    </div>
+    <div>
+      <div class="q">3 · ทำบ่อยแค่ไหน ครั้งละกี่นาที</div>
+      <div class="hint">ตัวเลขนี้คือมูลค่าของ Project นี้</div>
+      <div class="rules"><i></i><i></i><i></i></div>
+    </div>
+  </div>
+  <div class="field">
+    <div class="q">4 · คำสั่งประจำโปรเจกต์ — บทบาท</div>
+    <div class="hint">ให้มันทำหน้าที่อะไรให้ท่าน เช่น “เป็นผู้ช่วยเตรียมเอกสารเสนอที่ประชุมผู้บริหาร”</div>
+    <div class="rules"><i></i><i></i></div>
+  </div>
+  <div class="field">
+    <div class="q">5 · คำสั่งประจำโปรเจกต์ — บริบทบริษัทที่มันต้องรู้</div>
+    <div class="hint">เราผลิตอะไร ขายให้ใคร ผ่านช่องทางไหน ใครเป็นคนอ่านงานที่ออกมา</div>
+    <div class="rules tall"><i></i><i></i><i></i><i></i></div>
+  </div>
+  <div class="field">
+    <div class="q">6 · คำสั่งประจำโปรเจกต์ — รูปแบบผลลัพธ์ที่ต้องการ</div>
+    <div class="hint">ความยาว โครงเรื่อง ภาษา โทน สิ่งที่ต้องมีทุกครั้ง</div>
+    <div class="rules tall"><i></i><i></i><i></i></div>
+  </div>
+  <div class="field">
+    <div class="q">7 · คำสั่งประจำโปรเจกต์ — ข้อห้าม</div>
+    <div class="hint">อย่างน้อยต้องมีข้อนี้: ห้ามเดาตัวเลขที่ไม่มีในไฟล์ ให้บอกว่าไม่มีข้อมูลแทน</div>
+    <div class="rules"><i></i><i></i></div>
+  </div>
+</div>
+
+<div class="form" style="margin-top:18px">
+  <div class="fh"><span>เทมเพลต Project · ไฟล์อ้างอิงและการทดสอบ</span><span class="code">WS-M4 · หน้า 2</span></div>
+  <div class="field">
+    <div class="q">8 · ไฟล์อ้างอิงที่จะใส่ไว้ใน Project</div>
+    <div class="hint">ตรวจทุกไฟล์กับกติกา 3 ถังก่อนใส่ — Project เก็บไฟล์ค้างไว้ ความเสี่ยงสูงกว่าแชทที่คุยจบแล้วทิ้ง</div>
+    <div class="rules"><i></i><i></i><i></i></div>
+    <div class="checkline">ตรวจแล้วว่าไม่มีไฟล์ใดอยู่ในถังแดง</div>
+  </div>
+  <div class="field">
+    <div class="q">9 · คำถามทดสอบ 3 ข้อ</div>
+    <div class="hint">ยังไม่นับว่า Project เสร็จ จนกว่าจะทดสอบครบ 3 ข้อและผลใช้ได้</div>
+    <div class="rules tall"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+  </div>
+  <div class="field">
+    <div class="q">10 · ผลการทดสอบ</div>
+    <div class="checkline">ผ่าน ใช้งานได้เลย</div>
+    <div class="checkline">ยังต้องแก้คำสั่งประจำโปรเจกต์ตรงที่ ______________________________</div>
+    <div class="checkline">ยังต้องเพิ่มไฟล์อ้างอิงเรื่อง ______________________________</div>
+  </div>
+</div>
+
+<h2 class="mod"><span class="no">ปิดวง</span><span class="t">สิ่งที่จะเอาไปทำต่อ</span><span class="clock">16:15 – 16:30</span></h2>
+<p class="lead">เขียนก่อนพูด แล้วพูดให้เพื่อนร่วมโต๊ะฟัง</p>
+<div class="form">
+  <div class="fh"><span>คำมั่น 2 สัปดาห์</span><span class="code">WS-END</span></div>
+  <div class="field">
+    <div class="q">งานที่จะเอาไปลองภายใน 2 สัปดาห์</div>
+    <div class="rules"><i></i><i></i></div>
+  </div>
+  <div class="field">
+    <div class="q">จะให้ใครในทีมดูผลงานนั้น</div>
+    <div class="rules"><i></i></div>
+  </div>
+  <div class="field">
+    <div class="q">ถ้าจะขยายไปทั้งฝ่าย มีอะไรที่ต้องได้รับการแก้ก่อน</div>
+    <div class="hint">เช่น นโยบายข้อมูล การจัดการบัญชีโดย IT งบประมาณ การอบรมทีม</div>
+    <div class="rules"><i></i><i></i></div>
+  </div>
+</div>
+
+<!-- ================= ใบสรุปกลับบ้าน ================= -->
+<div class="cheat">
+  <h2>ใบสรุป — ติดไว้ข้างจอ<span>เอากลับไปใช้ต่อ · 1 หน้า</span></h2>
+  <div class="inner">
+    <h3>สิ่งเดียวที่ต้องจำถ้าจำได้แค่อย่างเดียว</h3>
+    <p>คำสั่งที่ได้งาน = <b>คุณเป็นใคร + บริบทที่คนนอกไม่รู้ + รูปแบบผลลัพธ์ + ข้อห้าม</b><br>
+    ถ้าผลออกมาไม่ถูกใจ <b>อย่าเปิดแชทใหม่</b> ให้บอกว่าไม่ชอบตรงไหนแล้วสั่งแก้ต่อในแชทเดิม</p>
+  </div>
+  <div class="cbox">
+    <div>
+      <h4>ข้อมูล 3 ถัง</h4>
+      <ul>
+        <li><span class="bucket"><span class="dot r"></span>ห้ามเด็ดขาด</span> — สูตรตำรับ ทะเบียนยา DMF batch record ผล stability ข้อมูลผู้ป่วย</li>
+        <li><span class="bucket"><span class="dot a"></span>ตัดข้อมูลระบุตัวก่อน</span> — ยอดขายรายลูกค้า ข้อร้องเรียน ราคาซัพพลายเออร์</li>
+        <li><span class="bucket"><span class="dot g"></span>ใส่ได้</span> — ประกาศสาธารณะ ร่างงานเขียนทั่วไป</li>
+      </ul>
+    </div>
+    <div>
+      <h4>วิธีจับผิด 4 ข้อ</h4>
+      <ol>
+        <li>สั่งให้อ้างอิงแถว ข้อ หรือหน้าเสมอ</li>
+        <li>เปิดไฟล์ตรวจจริงอย่างน้อย 1 จุด</li>
+        <li>ถามซ้ำด้วยมุมที่ต่าง ถ้าคำตอบเปลี่ยนไปมา ยังเชื่อไม่ได้</li>
+        <li>งานที่ตรวจไม่ได้ ไม่ใช้</li>
+      </ol>
+    </div>
+    <div>
+      <h4>ใช้ตอนไหน</h4>
+      <ul>
+        <li><b>เอกสารกองโต</b> ให้แยกเป็น “เรื่องที่ต้องตัดสินใจ / รับทราบ / เลยกำหนด” ไม่ใช่สั่งว่า “สรุปให้หน่อย”</li>
+        <li><b>ตัวเลขหลายไฟล์</b> อัปโหลดพร้อมกันแล้วถามคำถามที่ต้องอ่านประกอบกัน</li>
+        <li><b>งานเขียนที่ต้องส่งออกไป</b> ให้ร่าง แล้วเราแก้และรับผิดชอบ</li>
+        <li><b>งานที่ทำซ้ำทุกสัปดาห์</b> ทำเป็น Project ไม่ต้องพิมพ์บริบทใหม่</li>
+      </ul>
+    </div>
+    <div>
+      <h4>อย่าลืม</h4>
+      <ul>
+        <li>อย่าเชื่อม Gmail หรือ Drive ของบริษัทเข้าบัญชีส่วนตัว รอ IT วางระบบก่อน</li>
+        <li>AI ร่างได้ คนเซ็นชื่อคือคนรับผิดชอบ</li>
+        <li>มันไม่รู้เรื่องภายในบริษัทเรา นอกจากที่เราบอกหรือใส่ไฟล์ให้</li>
+        <li>มันตอบผิดได้อย่างมั่นใจ ปฏิบัติกับมันเหมือนผู้ช่วยใหม่ที่อ่านเร็วมากแต่เพิ่งเข้างานวันแรก</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<footer>
+  ใบงานผู้เรียน · หลักสูตร “ใช้ AI ทำงานจริงด้วย Claude” · บริษัท ที.พี. ดรัก แลบบอราทอรี่ (1969)<br>
+  ไฟล์ทุกไฟล์ในชุดฝึกอบรมเป็นข้อมูลสมมติ ไม่ใช่ข้อมูลจริงของบริษัท ห้ามนำไปใช้อ้างอิงในงานจริง
+</footer>
+</div>
