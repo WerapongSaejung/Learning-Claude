@@ -175,6 +175,18 @@ td.num{white-space:nowrap;font-family:"IBM Plex Mono",monospace;font-variant-num
 .banana-mark{width:17px;height:17px;flex:none;vertical-align:-3px}
 .bar .brand{display:flex;align-items:center;gap:8px;min-width:0}
 
+/* ---------- infographic ประกอบหัวข้อ ---------- */
+.ig{width:100%;max-width:860px;height:auto;margin-top:clamp(18px,2.6vw,30px);display:block}
+.ig .bx{fill:var(--surface);stroke:var(--line-2);stroke-width:1.5}
+.ig .bx2{fill:var(--surface-2);stroke:var(--line-2);stroke-width:1.5}
+.ig .hl{fill:var(--accent-soft);stroke:var(--accent);stroke-width:1.8}
+.ig .ar{stroke:var(--accent);stroke-width:2.4;fill:none;marker-end:url(#igarrow)}
+.ig text{font-family:"IBM Plex Sans Thai",Sarabun,sans-serif;fill:var(--ink)}
+.ig .t1{font-size:17px;font-weight:700}
+.ig .t2{font-size:13.5px;fill:var(--ink-2)}
+.ig .t3{font-size:12px;fill:var(--ink-3);font-family:"IBM Plex Mono",monospace}
+.ig .ta{fill:var(--accent-ink);font-weight:700;font-size:14px}
+
 /* ---------- การ์ดรูปประกอบทัวร์หน้าจอ ---------- */
 .tour{
   display:grid;grid-template-columns:repeat(auto-fit,minmax(330px,1fr));
@@ -232,8 +244,17 @@ html:not(.js) .hint{display:none}
 </style>
 
 <div class="deck">
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <marker id="igarrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0L10 5L0 10z" fill="var(--accent)"/>
+    </marker>
+  </defs>
+</svg>
 
-<section class="slide title on" data-sec="เปิด">
+<!-- ================= ก่อนเริ่ม ================= -->
+
+<section class="slide title on" data-sec="ก่อนเริ่ม">
   <div class="kicker">หลักสูตรอบรมภายใน · คณะผู้บริหาร</div>
   <h1>ใช้ AI ทำงานจริง<br>ด้วย Claude</h1>
   <div class="org">บริษัท ที.พี. ดรัก แลบบอราทอรี่ (1969) จำกัด</div>
@@ -251,8 +272,8 @@ html:not(.js) .hint{display:none}
   </svg>
 </section>
 
-<section class="slide" data-sec="เปิด">
-  <div class="kicker">วันนี้มีสองเป้า</div>
+<section class="slide" data-sec="ก่อนเริ่ม">
+  <div class="kicker">เป้าหมายการสอน</div>
   <h2>เข้าใจการใช้งาน Claude</h2>
   <ol class="big">
     <li><b>จบวันแล้วท่านสามารถใช้ได้จริง เข้าใจภาพรวมการใช้งาน</b><span class="note">มี Claude Project ของงานตัวเอง 1 ชิ้น ที่ใช้ได้วันจันทร์</span></li>
@@ -260,13 +281,13 @@ html:not(.js) .hint{display:none}
   </ol>
 </section>
 
-<section class="slide" data-sec="เปิด">
+<section class="slide" data-sec="ก่อนเริ่ม">
   <div class="kicker">รอบวง · 10 นาที</div>
-  <h2>งานอะไรที่กินเวลาท่าน<br>มากที่สุดในสัปดาห์</h2>
-  <p class="sub">เขียนงานที่ใช้เวลามากที่สุดที่นึกออก 3 ข้อ</p>
+  <h2>งานที่ใช้เวลามาก</h2>
+  <p class="sub">เขียนงานที่ใช้เวลามากที่สุดที่นึกออก 3 ข้อ แล้วอ่านให้ห้องฟัง — จดขึ้นบอร์ด ใช้เป็นโจทย์ตอนบ่าย</p>
 </section>
 
-<section class="slide" data-sec="กติกาข้อมูล">
+<section class="slide" data-sec="ก่อนเริ่ม">
   <div class="kicker">ก่อนเริ่มใช้งาน</div>
   <h2>ข้อมูลอะไรใส่ได้ ใส่ไม่ได้</h2>
   <div class="buckets">
@@ -284,87 +305,308 @@ html:not(.js) .hint{display:none}
   </div>
 </section>
 
-<section class="slide statement" data-sec="กติกาข้อมูล">
-  <div class="kicker">ข้อตกลงร่วมกัน ทิศทางการใช้</div>
+<section class="slide statement" data-sec="ก่อนเริ่ม">
+  <div class="kicker">ข้อตกลงร่วมที่ควรมี</div>
   <h2>AI ร่างได้<br>คนเซ็นชื่อ<br>คือคนรับผิดชอบ</h2>
   <div class="who">และเอกสารที่เข้าระบบคุณภาพต้องผ่านคนตรวจเสมอ</div>
 </section>
 
+<!-- ================= Claude มีการใช้งานกี่แบบ ================= -->
+
+<section class="slide divider" data-sec="รู้จัก Claude">
+  <div class="kicker">รู้จักเครื่องมือก่อนใช้</div>
+  <h2>Claude มีการใช้งาน<br>กี่แบบ</h2>
+  <div class="sub">สามแบบ สำหรับงานคนละลักษณะ — วันนี้เราลงมือกับแบบแรก อีกสองแบบดูให้เห็นว่ามีอะไรรออยู่</div>
+  <div class="clock">09:30 – 09:50</div>
+</section>
+
+<section class="slide" data-sec="รู้จัก Claude">
+  <div class="kicker">สามแบบ ต่างกันตรงไหน</div>
+  <h2>Chat · Cowork · CLI</h2>
+  <div class="tour">
+    <div class="item">
+      <svg class="ico" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M6 10h36v22H20l-8 8v-8H6z"/><path d="M14 18h20M14 24h13"/>
+      </svg>
+      <div class="nm">Claude Chat — ที่เราใช้ทั้งวันนี้</div>
+      <div class="nt">เว็บ มือถือ เดสก์ท็อป · ถาม-ตอบ ทำงานกับไฟล์ สร้างชิ้นงาน ทำ Projects · เริ่มง่ายที่สุด เหมาะกับงานคิดและงานเอกสารรายชิ้น</div>
+    </div>
+    <div class="item">
+      <svg class="ico" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <rect x="5" y="8" width="26" height="18" rx="3"/><path d="M12 32h12M18 26v6"/>
+        <rect x="33" y="18" width="10" height="18" rx="3"/><path d="M36 33h4"/>
+      </svg>
+      <div class="nm">Claude Cowork</div>
+      <div class="nt">มอบหมายงานเป็นชิ้นให้ทำจนจบ ทำงานกับโฟลเดอร์ไฟล์ · ตั้งงานประจำตามเวลา · สั่งจากมือถือได้ · ต้องติดตั้งแอปเดสก์ท็อป</div>
+    </div>
+    <div class="item">
+      <svg class="ico" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <rect x="5" y="9" width="38" height="30" rx="3"/><path d="M12 18l6 5-6 5M22 30h12"/>
+      </svg>
+      <div class="nm">Claude CLI (Claude Code)</div>
+      <div class="nt">สำหรับสายเทคนิค ทำงานกับโค้ดและระบบ · ตั้ง Routines ให้รันตามเวลา · ทีม IT ของเราจะเป็นคนใช้แบบนี้</div>
+    </div>
+  </div>
+  <div class="callout"><b>ข้อควรระวังที่ใช้ร่วมกันทุกแบบ</b> กติกาข้อมูล 3 ถังใช้เหมือนกันหมด
+  และ Cowork กับ CLI เข้าถึงไฟล์ในเครื่องได้กว้างกว่า Chat — ยิ่งมีสิทธิ์มาก ยิ่งต้องคิดก่อนให้สิทธิ์</div>
+</section>
+
+<section class="slide" data-sec="รู้จัก Claude">
+  <div class="kicker">Model และ Effort</div>
+  <h2>เลือกสมองให้ตรงกับงาน</h2>
+  <div class="two">
+    <div class="card"><span class="tag">Model — สมองหลายเบอร์</span>
+      <h3>เร็ว หรือ ละเอียด</h3>
+      <p>มีให้เลือกหลายตัว ต่างกันที่ความเร็วกับความละเอียดในการคิด ไม่ต้องจำชื่อรุ่น
+      จำหลักเดียว: <b>งานคิดหนัก เลือกตัวที่ช้ากว่า</b> งานถาม-ตอบทั่วไป ตัวเร็วพอ</p></div>
+    <div class="card"><span class="tag">Effort — คิดนานแค่ไหน</span>
+      <h3>โหมดคิดนาน</h3>
+      <p>เปิดได้เมื่องานต้องไล่เหตุผลหลายชั้น เช่น วิเคราะห์ตัวเลขหลายไฟล์ หรือวางแผนที่มีเงื่อนไขเยอะ
+      แลกกับเวลารอที่นานขึ้น — <b>งานง่ายไม่ต้องเปิด เสียเวลารอเปล่า</b></p></div>
+  </div>
+  <div class="callout"><b>ค่าเริ่มต้นดีอยู่แล้วสำหรับงานส่วนใหญ่</b> ปรับสองอย่างนี้เมื่อรู้สึกว่าคำตอบตื้นเกินไป ไม่ใช่ปรับทุกครั้ง</div>
+</section>
+
+<!-- ================= ทัวร์หน้าจอ ================= -->
+
+<section class="slide divider" data-sec="ทัวร์หน้าจอ">
+  <div class="kicker">เปิดหน้าจอจริง</div>
+  <h2>ทัวร์หน้าจอ</h2>
+  <div class="sub">มีอะไรอยู่ตรงไหน และสี่ความสามารถที่ควรรู้จักก่อนลงมือ</div>
+  <div class="clock">09:50 – 10:20</div>
+</section>
+
 <section class="slide" data-sec="ทัวร์หน้าจอ">
-  <div class="kicker">ทัวร์หน้าจอ · 15 นาที</div>
+  <div class="kicker">ทัวร์หน้าจอ</div>
   <h2>มีอะไรอยู่บนหน้าจอบ้าง</h2>
   <div class="tour">
-
     <div class="item">
-      <svg class="ico" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.9"
-           stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-        <rect x="4" y="13" width="40" height="22" rx="7"/>
-        <path d="M11 19v10"/>
-        <path d="M17 21h13M17 27h8"/>
-        <path d="M34 20l5 4-5 4"/>
+      <svg class="ico" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <rect x="4" y="13" width="40" height="22" rx="7"/><path d="M11 19v10"/><path d="M17 21h13M17 27h8"/><path d="M34 20l5 4-5 4"/>
       </svg>
       <div class="nm">ช่องพิมพ์</div>
       <div class="nt">จุดเริ่มของทุกอย่าง · ขึ้นบรรทัดใหม่โดยไม่ส่งข้อความ · แนบไฟล์ · สั่งด้วยเสียง</div>
     </div>
-
     <div class="item">
-      <svg class="ico" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.9"
-           stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-        <rect x="4" y="8" width="40" height="32" rx="5"/>
-        <path d="M18 8v32"/>
-        <path d="M8 15h6M8 21h6M8 27h6"/>
-        <path d="M23 16h16M23 23h13M23 30h9"/>
+      <svg class="ico" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <rect x="4" y="8" width="40" height="32" rx="5"/><path d="M18 8v32"/><path d="M8 15h6M8 21h6M8 27h6"/><path d="M23 16h16M23 23h13M23 30h9"/>
       </svg>
       <div class="nm">แถบด้านซ้าย</div>
       <div class="nt">เริ่มแชทใหม่ · ประวัติแชทเก่า · ค้นหาแชทที่เคยคุย · Projects</div>
     </div>
-
     <div class="item">
-      <svg class="ico" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.9"
-           stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <svg class="ico" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
         <path d="M32 15 19 28a5 5 0 007 7l11-11a8 8 0 00-11-11L13 26a11 11 0 0016 15"/>
       </svg>
       <div class="nm">เครื่องมือในช่องพิมพ์</div>
-      <div class="nt">แนบไฟล์ · ค้นเว็บ · โหมดคิดนาน — บอกแค่ว่ามีอะไร ใช้ตอนไหนค่อยว่ากันในโมดูล</div>
+      <div class="nt">แนบไฟล์ · ค้นเว็บ · โหมดคิดนาน — บอกแค่ว่ามีอะไร ใช้ตอนไหนค่อยว่ากันในเดโม</div>
     </div>
-
     <div class="item">
-      <svg class="ico" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.9"
-           stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-        <rect x="5" y="10" width="38" height="12" rx="6"/>
-        <circle cx="13" cy="16" r="3" fill="currentColor" stroke="none"/>
-        <path d="M21 16h15"/>
-        <rect x="5" y="27" width="38" height="12" rx="6"/>
-        <circle cx="13" cy="33" r="3"/>
-        <path d="M21 33h11"/>
+      <svg class="ico" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <rect x="5" y="10" width="38" height="12" rx="6"/><circle cx="13" cy="16" r="3" fill="currentColor" stroke="none"/><path d="M21 16h15"/>
+        <rect x="5" y="27" width="38" height="12" rx="6"/><circle cx="13" cy="33" r="3"/><path d="M21 33h11"/>
       </svg>
       <div class="nm">ตัวเลือกโมเดล</div>
-      <div class="nt">ต่างกันที่ความเร็วกับความละเอียด ไม่ต้องจำชื่อ จำหลักว่างานคิดเยอะเลือกตัวที่ช้ากว่า</div>
+      <div class="nt">ที่เพิ่งคุยกันเมื่อกี้ — อยู่ตรงหัวช่องพิมพ์</div>
     </div>
-
     <div class="item">
-      <svg class="ico" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.9"
-           stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-        <path d="M7 14h34M7 24h34M7 34h34"/>
-        <circle cx="18" cy="14" r="4" fill="var(--surface)"/>
-        <circle cx="31" cy="24" r="4" fill="var(--surface)"/>
-        <circle cx="14" cy="34" r="4" fill="var(--surface)"/>
+      <svg class="ico" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M7 14h34M7 24h34M7 34h34"/><circle cx="18" cy="14" r="4" fill="var(--surface)"/><circle cx="31" cy="24" r="4" fill="var(--surface)"/><circle cx="14" cy="34" r="4" fill="var(--surface)"/>
       </svg>
       <div class="nm">หน้าตั้งค่า</div>
-      <div class="nt">ภาษา และการตั้งค่าความเป็นส่วนตัวกับการนำข้อมูลไปฝึกโมเดล — เปิดให้เห็นด้วยตาว่าควบคุมได้ตรงไหน</div>
+      <div class="nt">ภาษา · ความเป็นส่วนตัว · Instructions ที่เราจะไปกรอกกันช่วง 11:05</div>
     </div>
-
   </div>
 </section>
 
-<section class="slide divider" data-sec="M1">
-  <div class="kicker">โมดูลที่ 1</div>
-  <h2>คุยให้ได้งาน</h2>
-  <div class="sub">โจทย์: ลูกค้าที่ย่างกุ้งติดตามเรื่องเอกสารขึ้นทะเบียนมาเป็นครั้งที่ 3</div>
-  <div class="clock">09:40 – 10:35</div>
+<section class="slide" data-sec="ทัวร์หน้าจอ">
+  <div class="kicker">ความสามารถที่ 1</div>
+  <h2>Artifacts — ชิ้นงานข้างแชท</h2>
+  <svg class="ig" viewBox="0 0 860 300" role="img" aria-label="แผนภาพ Artifacts">
+    <rect class="bx" x="20" y="30" width="330" height="240" rx="10"/>
+    <text class="t3" x="40" y="60">CHAT</text>
+    <rect class="bx2" x="40" y="80" width="230" height="34" rx="8"/><text class="t2" x="52" y="102">ทำสไลด์สรุปไตรมาสให้หน่อย</text>
+    <rect class="bx2" x="40" y="128" width="260" height="34" rx="8"/><text class="t2" x="52" y="150">เพิ่มหน้ากำไรแยกช่องทาง</text>
+    <rect class="bx2" x="40" y="176" width="200" height="34" rx="8"/><text class="t2" x="52" y="198">เปลี่ยนหน้า 3 เป็นตาราง</text>
+    <path class="ar" d="M360 150 L455 150"/>
+    <rect class="hl" x="470" y="30" width="370" height="240" rx="10"/>
+    <text class="t3" x="490" y="60">ARTIFACT</text>
+    <text class="t1" x="490" y="95">ชิ้นงานตัวเดิม อัปเดตทุกครั้งที่สั่งแก้</text>
+    <rect class="bx" x="490" y="115" width="330" height="42" rx="6"/><text class="t2" x="505" y="141">สไลด์สรุปไตรมาส 3 — ฉบับล่าสุด</text>
+    <text class="ta" x="490" y="195">ไม่ต้องเริ่มใหม่ · แชร์เป็นลิงก์ได้</text>
+    <text class="t2" x="490" y="222">เอกสาร ตาราง หน้าเว็บ แผนภาพ</text>
+    <text class="t2" x="490" y="246">อยู่ข้างแชท แก้กี่รอบก็ได้</text>
+  </svg>
 </section>
 
-<section class="slide" data-sec="M1">
+<section class="slide" data-sec="ทัวร์หน้าจอ">
+  <div class="kicker">ความสามารถที่ 2 · เดโมบนเครื่องวิทยากร</div>
+  <h2>Routines — งานที่รันเองตามเวลา</h2>
+  <svg class="ig" viewBox="0 0 860 290" role="img" aria-label="แผนภาพ Routines">
+    <circle cx="105" cy="145" r="62" fill="var(--surface)" stroke="var(--accent)" stroke-width="2.4"/>
+    <path d="M105 105 L105 145 L138 162" stroke="var(--accent)" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+    <text class="t3" x="70" y="240">ตั้งเวลาไว้ครั้งเดียว</text>
+    <path class="ar" d="M185 145 L275 145"/>
+    <rect class="hl" x="290" y="55" width="270" height="180" rx="10"/>
+    <text class="t1" x="312" y="95">Claude ทำงานเอง</text>
+    <text class="t2" x="312" y="128">ทุกเช้าวันจันทร์ 07:00</text>
+    <text class="t2" x="312" y="156">สรุปยอดขายสัปดาห์ก่อน</text>
+    <text class="t2" x="312" y="184">เทียบกับเป้า พร้อมข้อสังเกต</text>
+    <path class="ar" d="M575 145 L665 145"/>
+    <rect class="bx" x="680" y="80" width="160" height="130" rx="10"/>
+    <text class="t1" x="702" y="120">รายงาน</text>
+    <text class="t2" x="702" y="150">รออยู่ในกล่อง</text>
+    <text class="t2" x="702" y="176">ก่อนเราตื่น</text>
+  </svg>
+  <div class="callout">อยู่ในฝั่ง Claude Code / Cowork — วันนี้ดูจากเครื่องวิทยากรให้เห็นว่ามีอะไรรออยู่ ยังไม่ต้องติดตั้งตาม</div>
+</section>
+
+<section class="slide" data-sec="ทัวร์หน้าจอ">
+  <div class="kicker">ความสามารถที่ 3 · เดโมบนเครื่องวิทยากร</div>
+  <h2>Dispatch — สั่งจากมือถือ ให้ทำบนคอมพ์เรา</h2>
+  <svg class="ig" viewBox="0 0 860 290" role="img" aria-label="แผนภาพ Dispatch">
+    <rect class="bx" x="40" y="55" width="130" height="200" rx="16"/>
+    <rect class="bx2" x="58" y="80" width="94" height="120" rx="6"/>
+    <circle cx="105" cy="228" r="9" fill="none" stroke="var(--line-2)" stroke-width="2"/>
+    <text class="t2" x="66" y="125">“ทำสรุป</text><text class="t2" x="66" y="147">ประชุมเมื่อวาน</text><text class="t2" x="66" y="169">ให้หน่อย”</text>
+    <text class="t3" x="48" y="285">มือถือ ระหว่างเดินทาง</text>
+    <path class="ar" d="M185 155 L295 155"/>
+    <rect class="hl" x="310" y="60" width="300" height="180" rx="10"/>
+    <text class="t1" x="332" y="100">คอมพิวเตอร์ที่ออฟฟิศ</text>
+    <text class="t2" x="332" y="132">Claude ทำงานบนเครื่องเรา</text>
+    <text class="t2" x="332" y="158">ใช้ไฟล์และโปรแกรมในเครื่อง</text>
+    <text class="t3" x="332" y="215">เครื่องต้องเปิดและแอปต้องทำงานอยู่</text>
+    <path class="ar" d="M625 155 L715 155"/>
+    <rect class="bx" x="730" y="90" width="110" height="130" rx="10"/>
+    <text class="t1" x="748" y="130">งานเสร็จ</text>
+    <text class="t2" x="748" y="160">เด้งกลับ</text>
+    <text class="t2" x="748" y="184">เข้ามือถือ</text>
+  </svg>
+</section>
+
+<section class="slide" data-sec="ทัวร์หน้าจอ">
+  <div class="kicker">ความสามารถที่ 4</div>
+  <h2>Customize — ปรับให้เป็นของเรา<br>และดู Usage ให้เป็น</h2>
+  <ul class="big">
+    <li><b>Instructions ประจำตัว</b><span class="note">บอกครั้งเดียวว่าเราเป็นใคร ชอบงานแบบไหน — ทุกแชทหลังจากนั้นรู้เอง (ช่วง 11:05 จะทำของจริงกัน)</span></li>
+    <li><b>ความเป็นส่วนตัวและการนำข้อมูลไปฝึกโมเดล</b><span class="note">ตั้งค่าได้เอง — เปิดหน้าจริงดูด้วยกันตรงนี้เลย</span></li>
+    <li><b>Usage — ปริมาณการใช้</b><span class="note">แผน Pro มีโควตาการใช้ต่อรอบเวลา งานหนักกินโควตาเร็วกว่า · ถ้าชนเพดานกลางงาน รอรอบถัดไปหรือสลับตัวโมเดลเบากว่า — รู้ไว้จะได้ไม่ตกใจ</span></li>
+  </ul>
+</section>
+
+<!-- ================= Skill ================= -->
+
+<section class="slide divider" data-sec="Skill">
+  <div class="kicker">ต่อความสามารถเพิ่ม</div>
+  <h2>Skill คืออะไร</h2>
+  <div class="sub">ความเชี่ยวชาญสำเร็จรูปที่ติดตั้งเพิ่มได้ เหมือนส่งพนักงานไปอบรมเฉพาะทาง</div>
+  <div class="clock">10:35 – 10:50</div>
+</section>
+
+<section class="slide" data-sec="Skill">
+  <div class="kicker">โครงสร้างของ Skill</div>
+  <h2>ข้างในมีสามส่วน</h2>
+  <svg class="ig" viewBox="0 0 860 300" role="img" aria-label="โครงสร้าง Skill">
+    <path d="M40 70 L40 250 Q40 262 52 262 L300 262 Q312 262 312 250 L312 92 Q312 80 300 80 L180 80 L160 58 L52 58 Q40 58 40 70 Z"
+          fill="var(--surface)" stroke="var(--accent)" stroke-width="2.2"/>
+    <text class="t1" x="66" y="130">แฟ้ม Skill</text>
+    <text class="t2" x="66" y="162">= ชุดความรู้เรื่องเดียว</text>
+    <text class="t3" x="66" y="230">เช่น “ทำสไลด์แบบบริษัทเรา”</text>
+    <path class="ar" d="M330 160 L420 160"/>
+    <rect class="hl" x="435" y="40" width="405" height="70" rx="8"/>
+    <text class="t1" x="455" y="70">1 · ชื่อและเงื่อนไข</text>
+    <text class="t2" x="455" y="96">บอกว่าทำอะไร ใช้เมื่อไหร่ — Claude หยิบใช้เอง</text>
+    <rect class="bx" x="435" y="122" width="405" height="70" rx="8"/>
+    <text class="t1" x="455" y="152">2 · วิธีทำงาน</text>
+    <text class="t2" x="455" y="178">ขั้นตอน กติกา มาตรฐานของงานนั้น เขียนไว้ครั้งเดียว</text>
+    <rect class="bx" x="435" y="204" width="405" height="70" rx="8"/>
+    <text class="t1" x="455" y="234">3 · ไฟล์ประกอบ</text>
+    <text class="t2" x="455" y="260">แม่แบบ ตัวอย่าง โลโก้ — ของที่งานนั้นต้องใช้ประจำ</text>
+  </svg>
+  <div class="callout"><b>ทำไมผู้บริหารควรสนใจ</b> Skill คือวิธีทำให้ “มาตรฐานงานของบริษัท” ติดไปกับ AI —
+  ทุกคนในทีมได้งานหน้าตาเดียวกัน ไม่ขึ้นกับว่าใครพิมพ์เก่ง</div>
+</section>
+
+<section class="slide" data-sec="Skill">
+  <div class="kicker">ติดตั้งจากหน้า Settings ได้เลย</div>
+  <h2>Skill ที่แนะนำสำหรับงานเรา</h2>
+  <div class="tw"><table>
+    <thead><tr><th>Skill</th><th>ได้อะไร</th><th>ใช้กับงานไหนของเรา</th></tr></thead>
+    <tbody>
+      <tr><td><b>เอกสาร Word</b></td><td>สร้างและแก้ .docx จัดรูปแบบครบ</td><td>ร่างจดหมาย รายงาน หนังสือชี้แจงลูกค้า</td></tr>
+      <tr><td><b>สไลด์ PowerPoint</b></td><td>สร้าง .pptx เป็นเรื่องเป็นราว</td><td>สไลด์เสนอคณะกรรมการ สรุปไตรมาส</td></tr>
+      <tr><td><b>ตาราง Excel</b></td><td>สร้างและวิเคราะห์ .xlsx พร้อมสูตร</td><td>สรุปยอดขาย ต้นทุน ตารางติดตาม CAPA</td></tr>
+      <tr><td><b>เอกสาร PDF</b></td><td>อ่าน รวม แยก กรอกฟอร์ม PDF</td><td>เอกสารทะเบียนยา ประกาศ อย. แบบฟอร์ม</td></tr>
+    </tbody>
+  </table></div>
+  <div class="callout">สี่ตัวนี้คืองานเอกสารที่ทำทุกวันอยู่แล้ว — ติดตั้งแล้วผลลัพธ์เปลี่ยนจาก “ข้อความในแชท” เป็น “ไฟล์ที่ส่งต่อได้เลย”</div>
+</section>
+
+<!-- ================= MCP / Connector ================= -->
+
+<section class="slide divider" data-sec="Connector">
+  <div class="kicker">ต่อกับระบบที่ใช้อยู่</div>
+  <h2>MCP / Connector<br>คืออะไร</h2>
+  <div class="clock">10:50 – 11:05</div>
+</section>
+
+<section class="slide" data-sec="Connector">
+  <div class="kicker">ภาพเดียวจบ</div>
+  <h2>Connector คือสายต่อ<br>Plugin คือชุดสำเร็จ</h2>
+  <svg class="ig" viewBox="0 0 860 320" role="img" aria-label="แผนภาพ MCP Connector">
+    <rect class="hl" x="330" y="110" width="200" height="100" rx="14"/>
+    <text class="t1" x="382" y="155">Claude</text>
+    <text class="t3" x="356" y="185">คุยผ่านมาตรฐาน MCP</text>
+    <rect class="bx" x="60" y="30" width="180" height="64" rx="10"/><text class="t1" x="82" y="58">อีเมล</text><text class="t2" x="82" y="80">อ่าน สรุป ร่างตอบ</text>
+    <rect class="bx" x="60" y="128" width="180" height="64" rx="10"/><text class="t1" x="82" y="156">ไดรฟ์เอกสาร</text><text class="t2" x="82" y="178">ค้นและหยิบไฟล์มาใช้</text>
+    <rect class="bx" x="60" y="226" width="180" height="64" rx="10"/><text class="t1" x="82" y="254">ปฏิทิน</text><text class="t2" x="82" y="276">ดูนัด สรุปสัปดาห์</text>
+    <path class="ar" d="M250 62 L322 128"/>
+    <path class="ar" d="M250 160 L322 160"/>
+    <path class="ar" d="M250 258 L322 192"/>
+    <rect class="bx2" x="620" y="90" width="200" height="140" rx="10"/>
+    <text class="t1" x="642" y="124">Plugin</text>
+    <text class="t2" x="642" y="152">Skill + Connector</text>
+    <text class="t2" x="642" y="176">+ ตัวช่วย มัดรวมเป็นชุด</text>
+    <text class="t2" x="642" y="200">ติดตั้งครั้งเดียวได้ครบ</text>
+    <path class="ar" d="M612 160 L545 160"/>
+  </svg>
+  <div class="callout"><b>ข้อควรระวังที่สำคัญที่สุดของวันนี้</b> — อย่าเชื่อมอีเมลหรือไดรฟ์ของบริษัท
+  เข้ากับบัญชี Pro ส่วนตัว เท่ากับเอาข้อมูลองค์กรออกนอกระบบที่ IT ควบคุม เรื่องนี้รอ IT วางระบบก่อน</div>
+</section>
+
+<!-- ================= ให้ Claude รู้จักเรา ================= -->
+
+<section class="slide divider" data-sec="รู้จักเรา">
+  <div class="kicker">ลงมือครั้งแรกของวัน</div>
+  <h2>ให้ Claude รู้จักเรา</h2>
+  <div class="sub">ใช้ Claude สัมภาษณ์ตัวเอง แล้วเอาบทสรุปไปใส่ Instructions — บอกครั้งเดียว ใช้ได้ทุกแชท</div>
+  <div class="clock">11:05 – 11:25</div>
+</section>
+
+<section class="slide" data-sec="รู้จักเรา">
+  <div class="kicker">พิมพ์ตามได้เลย</div>
+  <h2>Prompt สัมภาษณ์ตัวเอง</h2>
+  <div class="prompt good"><span class="lbl">คัดลอกไปใช้ได้</span>ผมกำลังตั้งค่าให้คุณช่วยงานผมได้ดีขึ้น
+  ช่วยสัมภาษณ์ผมทีละคำถาม รวม 5 ข้อ เกี่ยวกับ ตำแหน่งและหน้าที่ · งานที่ทำบ่อย ·
+  รูปแบบงานที่ชอบ · สิ่งที่ห้ามทำ · วิธีเรียกผม
+  ถามจบแล้วสรุปคำตอบทั้งหมดเป็นย่อหน้าเดียว สำหรับวางในช่อง Instructions ของ Claude</div>
+  <ol class="big">
+    <li><b>ตอบครบ 5 ข้อ</b><span class="note">ตอบสั้นๆ ตรงๆ ไม่ต้องสวย</span></li>
+    <li><b>คัดลอกย่อหน้าสรุปที่ได้</b></li>
+    <li><b>วางในหน้าตั้งค่า → Instructions</b><span class="note">จากนี้ทุกแชทใหม่จะรู้จักท่านโดยไม่ต้องแนะนำตัวอีก</span></li>
+  </ol>
+</section>
+
+<!-- ================= DEMO 1 ================= -->
+
+<section class="slide divider" data-sec="Demo 1">
+  <div class="kicker">เริ่ม Demo · ที่หนึ่ง</div>
+  <h2>คุยให้ได้งาน</h2>
+  <div class="sub">Prompt อย่างไรให้ได้งาน — ทำจริง 2 ตัวอย่าง</div>
+  <div class="clock">11:25 – 12:00</div>
+</section>
+
+<section class="slide" data-sec="Demo 1">
   <div class="kicker">เทียบกันบนจอ</div>
   <h2>คำสั่งเดียวกันคนละแบบ<br>ได้ของคนละอย่าง</h2>
   <div class="prompt bad"><span class="lbl">แบบที่ทุกคนพิมพ์</span>ช่วยเขียนอีเมลขอโทษลูกค้า</div>
@@ -374,7 +616,7 @@ html:not(.js) .hint{display:none}
   โทนขอโทษแต่ไม่อ้อมค้อม ห้ามสัญญาวันที่ที่เรายังยืนยันไม่ได้ และห้ามโยนความผิดให้แผนกอื่น</div>
 </section>
 
-<section class="slide" data-sec="M1">
+<section class="slide" data-sec="Demo 1">
   <div class="kicker">หลัก 4 ข้อ</div>
   <h2>คำสั่งที่ได้งาน<br>มีของสี่อย่างนี้</h2>
   <ol class="big">
@@ -385,28 +627,37 @@ html:not(.js) .hint{display:none}
   </ol>
 </section>
 
-<section class="slide" data-sec="M1">
-  <div class="kicker">สิ่งที่คนทำผิดที่สุด</div>
-  <h2>ผลไม่ถูกใจ<br>อย่าเปิดแชทใหม่</h2>
-  <div class="prompt bad"><span class="lbl">ห้ามพูด</span>ไม่ดี ทำใหม่</div>
-  <div class="prompt good"><span class="lbl">พูดอย่างนี้</span>ย่อหน้าที่สองยังอ้อมเกินไป เขียนใหม่ให้ตรงกว่านี้ และตัดคำขอโทษให้เหลือประโยคเดียว</div>
-  <div class="callout"><b>เหตุผล</b> ถ้าไม่บอกว่าไม่ดีตรงไหน ก็จะได้ของที่ไม่ดีคนละแบบวนไปเรื่อยๆ</div>
+<section class="slide" data-sec="Demo 1">
+  <div class="kicker">ลงมือ 2 ตัวอย่าง</div>
+  <h2>ทำจริงทั้งสองข้อ</h2>
+  <div class="two">
+    <div class="card"><span class="tag">ตัวอย่างที่ 1 · งานเขียนถึงคนนอก</span>
+      <h3>ตอบลูกค้าย่างกุ้งที่ตามครั้งที่ 3</h3>
+      <p>ใช้ไฟล์อีเมลลูกค้า อ่าน Message 1 ให้จบก่อน — เขาขอ “วันที่ที่เป็นจริง” ไม่ได้ขอเอกสาร แล้วสั่งแก้ต่ออีก 2 รอบโดยไม่เปิดแชทใหม่</p></div>
+    <div class="card"><span class="tag">ตัวอย่างที่ 2 · งานถังแดง ทำแบบเลี่ยง</span>
+      <h3>ขอโครงรายงานสอบสวนข้อร้องเรียน</h3>
+      <p>ถามเป็นหลักการ ไม่ใส่ข้อมูลจริง — ได้โครงมาตรฐานมา แล้วไปกรอกของจริงเองในเครื่อง คือวิธีใช้กับงานที่ข้อมูลออกนอกไม่ได้</p></div>
+  </div>
+  <div class="callout"><b>กติกาการแก้งาน</b> ห้ามพูดว่า “ไม่ดี ทำใหม่” — ต้องบอกว่าไม่ดีตรงไหน เช่น
+  “ย่อหน้าสองอ้อมไป เขียนให้ตรงกว่านี้ และตัดคำขอโทษเหลือประโยคเดียว”</div>
 </section>
 
-<section class="slide divider" data-sec="M2">
-  <div class="kicker">โมดูลที่ 2</div>
+<!-- ================= DEMO 2 ================= -->
+
+<section class="slide divider" data-sec="Demo 2">
+  <div class="kicker">Demo ที่สอง</div>
   <h2>ทำงานกับไฟล์</h2>
   <div class="sub">โจทย์: ไตรมาส 3 ยอดตก เพราะอะไร</div>
-  <div class="clock">10:50 – 12:00</div>
+  <div class="clock">13:00 – 13:45</div>
 </section>
 
-<section class="slide" data-sec="M2">
+<section class="slide" data-sec="Demo 2">
   <div class="kicker">ไฟล์ที่อัปโหลด</div>
   <h2>ยอดขาย 720 แถว<br>ข้อร้องเรียน 80 รายการ<br>รายงานประชุม 10 หน้า</h2>
   <p class="sub">คำถามเดียว: มีอะไรผิดปกติที่ผมควรรู้บ้าง และดูจากตัวเลขไหน</p>
 </section>
 
-<section class="slide" data-sec="M2">
+<section class="slide" data-sec="Demo 2">
   <div class="kicker">คำตอบที่ตัวเลขยืนยันได้</div>
   <h2>ยอดไม่ได้ตกเฉยๆ<br>มีช่องทางหนึ่งพังไปแล้ว</h2>
   <div class="tw"><table>
@@ -422,7 +673,7 @@ html:not(.js) .hint{display:none}
   ต้องแยกตามช่องทางถึงจะเห็นว่ามีช่องทางหนึ่งพังไปแล้ว และต้องเปิดไฟล์ข้อร้องเรียนประกอบจึงจะรู้ว่าทำไม</div>
 </section>
 
-<section class="slide" data-sec="M2">
+<section class="slide" data-sec="Demo 2">
   <div class="kicker">เอกสารกองโต</div>
   <h2>อย่าสั่งว่า<br>“สรุปให้หน่อย”</h2>
   <div class="prompt bad"><span class="lbl">ได้ย่อความ</span>สรุปรายงานประชุมฉบับนี้ให้หน่อย</div>
@@ -430,20 +681,7 @@ html:not(.js) .hint{display:none}
   อะไรคือเรื่องที่รับทราบเฉยๆ และอะไรคือเรื่องที่เลยกำหนดแล้ว</div>
 </section>
 
-<section class="slide" data-sec="M2">
-  <div class="kicker">ลงมือ · 30 นาที</div>
-  <h2>เลือกโจทย์ที่ใกล้งานท่าน</h2>
-  <div class="two">
-    <div class="card"><span class="tag">โจทย์ ก · สายตัวเลข</span>
-      <h3>รายงานคณะกรรมการใน 3 ประโยค</h3>
-      <p>ถ้าท่านต้องอธิบายสาเหตุที่ยอดไตรมาส 3 ตก ให้คณะกรรมการฟังใน 3 ประโยค ท่านจะพูดว่าอะไร</p></div>
-    <div class="card"><span class="tag">โจทย์ ข · สายเอกสาร</span>
-      <h3>ประกาศใหม่ทำให้ต้องแก้ SOP ตรงไหน</h3>
-      <p>เทียบประกาศฉบับใหม่กับ SOP-QA-012 ที่ใช้อยู่ ตอบเป็นตารางเทียบข้อต่อข้อ</p></div>
-  </div>
-</section>
-
-<section class="slide" data-sec="M2">
+<section class="slide" data-sec="Demo 2">
   <div class="kicker">สำคัญที่สุดของวัน</div>
   <h2>วิธีจับผิด</h2>
   <ol class="big">
@@ -454,18 +692,16 @@ html:not(.js) .hint{display:none}
   </ol>
 </section>
 
-<section class="slide statement" data-sec="M2">
-  <h2>มันช่วยให้ท่าน<br>อ่านของ 10 หน้าจบใน 2 นาที<br><br>แต่ไม่ได้ช่วยให้ท่าน<br>ไม่ต้องรับผิดชอบ<br>สิ่งที่เซ็นชื่อ</h2>
-</section>
+<!-- ================= DEMO 3 ================= -->
 
-<section class="slide divider" data-sec="M3">
-  <div class="kicker">โมดูลที่ 3</div>
+<section class="slide divider" data-sec="Demo 3">
+  <div class="kicker">Demo ที่สาม</div>
   <h2>สร้างไฟล์ออกมาจริง</h2>
-  <div class="sub">ไม่ได้จบที่คำตอบในหน้าจอ แต่ออกมาเป็นไฟล์ที่เอาเข้าที่ประชุมได้เลย</div>
-  <div class="clock">13:00 – 14:00</div>
+  <div class="sub">สรุปผู้บริหาร 1 หน้า · สไลด์ · Excel — จากไฟล์ยอดขายและต้นทุน</div>
+  <div class="clock">13:45 – 14:30</div>
 </section>
 
-<section class="slide" data-sec="M3">
+<section class="slide" data-sec="Demo 3">
   <div class="kicker">สั่งครั้งเดียว แก้ต่อได้เรื่อยๆ</div>
   <h2>ไม่ต้องเริ่มใหม่<br>ทุกครั้งที่อยากแก้</h2>
   <div class="prompt good"><span class="lbl">สั่งครั้งแรก</span>จากสองไฟล์นี้ ทำสไลด์สรุปผลประกอบการไตรมาส 3 ให้ผม 5 หน้า
@@ -477,7 +713,7 @@ html:not(.js) .hint{display:none}
   </ul>
 </section>
 
-<section class="slide" data-sec="M3">
+<section class="slide" data-sec="Demo 3">
   <div class="kicker">คำถามที่ผู้บริหารต้องถาม</div>
   <h2>ยอดขายฟื้นแล้ว<br>กำไรฟื้นด้วยไหม</h2>
   <div class="tw"><table>
@@ -490,30 +726,34 @@ html:not(.js) .hint{display:none}
     </tbody>
   </table></div>
   <div class="callout"><b>ยอดที่โตมาจากช่องทางส่งออก</b> กำไรขั้นต้นจึงลดจาก 39% เหลือ 37% ทั้งที่ยอดขายโตขึ้น
-  — ยอดขายอย่างเดียวเล่าเรื่องไม่ครบ</div>
+  — ยอดขายอย่างเดียวเล่าเรื่องไม่ครบ · ไฟล์สวยไม่ได้แปลว่าตัวเลขถูก ตรวจก่อนส่งเสมอ</div>
 </section>
 
-<section class="slide divider" data-sec="M4">
-  <div class="kicker">โมดูลที่ 4 · หัวใจของวันนี้</div>
-  <h2>สร้าง Project<br>ของงานตัวเอง</h2>
+<!-- ================= DEMO 4 ================= -->
+
+<section class="slide divider" data-sec="Demo 4">
+  <div class="kicker">Demo ที่สี่ · หัวใจของวัน</div>
+  <h2>Projects<br>สร้างของตัวเอง</h2>
   <div class="sub">จบช่วงนี้ ทุกท่านจะมีของที่ใช้ได้จริงวันจันทร์</div>
-  <div class="clock">14:00 – 15:10</div>
+  <div class="clock">14:45 – 15:50</div>
 </section>
 
-<section class="slide" data-sec="M4">
+<section class="slide" data-sec="Demo 4">
   <div class="kicker">Project คืออะไร</div>
   <h2>พื้นที่งานที่รู้เรื่องเราแล้ว<br>ไม่ต้องอธิบายใหม่ทุกครั้ง</h2>
   <div class="two">
-    <div class="card"><span class="tag">ตอนเช้าเราทำแบบนี้</span>
+    <div class="card"><span class="tag">ก่อนมี Project</span>
       <h3>พิมพ์บริบทใหม่ทุกครั้ง</h3>
       <p>ทุกแชทต้องเล่าใหม่ว่าบริษัทเราทำอะไร ขายให้ใคร ต้องการงานหน้าตาแบบไหน</p></div>
     <div class="card"><span class="tag">ใน Project</span>
       <h3>ใส่ไว้ครั้งเดียว</h3>
       <p>คำสั่งประจำโปรเจกต์ + ไฟล์อ้างอิงที่ใช้ซ้ำ ถามคำถามได้เลย ไม่ต้องเล่าใหม่</p></div>
   </div>
+  <div class="callout"><b>ต่างกับ Instructions ที่ทำตอน 11:05 ยังไง</b> — Instructions คือ “รู้จักตัวเรา” ติดทุกแชท ·
+  Project คือ “รู้จักงานเรื่องนั้น” เฉพาะห้องงานนั้น ใส่ไฟล์อ้างอิงประจำเรื่องได้</div>
 </section>
 
-<section class="slide" data-sec="M4">
+<section class="slide" data-sec="Demo 4">
   <div class="kicker">ก่อนใส่อะไรลง Project</div>
   <h2>Project เก็บไฟล์ค้างไว้<br>ความเสี่ยงสูงกว่าแชท</h2>
   <div class="two">
@@ -526,21 +766,23 @@ html:not(.js) .hint{display:none}
   </div>
 </section>
 
-<section class="slide" data-sec="M4">
-  <div class="kicker">ลงมือ · 35 นาที</div>
+<section class="slide" data-sec="Demo 4">
+  <div class="kicker">ลงมือ · 40 นาที</div>
   <h2>กรอกใบงานก่อน<br>แล้วค่อยเปิดหน้าจอ</h2>
   <ol class="big">
-    <li><b>เลือกงานจากลิสต์บนบอร์ดตอนเช้า</b><span class="note">งานที่ทำซ้ำทุกสัปดาห์ และเล็กพอจะเสร็จใน 35 นาที</span></li>
+    <li><b>เลือกงานจากลิสต์บนบอร์ดตอนเช้า</b><span class="note">งานที่ทำซ้ำทุกสัปดาห์ และเล็กพอจะเสร็จในช่วงนี้</span></li>
     <li><b>เขียนคำสั่งประจำโปรเจกต์ 4 ส่วน</b><span class="note">บทบาท · บริบทบริษัท · รูปแบบผลลัพธ์ · ข้อห้าม</span></li>
     <li><b>ใส่ไฟล์อ้างอิง หลังตรวจกติกา 3 ถังแล้ว</b></li>
     <li><b>ทดสอบด้วยคำถามจริง 3 ข้อ</b><span class="note">ยังไม่นับว่าเสร็จ จนกว่าจะทดสอบครบและผลใช้ได้</span></li>
   </ol>
 </section>
 
+<!-- ================= ปิดวง ================= -->
+
 <section class="slide divider" data-sec="ปิดวง">
   <div class="kicker">ช่วงสุดท้าย</div>
   <h2>แล้วบริษัทเรา<br>ควรเอาเข้ามาไหม</h2>
-  <div class="clock">15:45 – 16:30</div>
+  <div class="clock">15:50 – 16:30</div>
 </section>
 
 <section class="slide" data-sec="ปิดวง">
@@ -574,17 +816,6 @@ html:not(.js) .hint{display:none}
       ตามระบบคุณภาพเหมือนเดิม · ไม่นำข้อมูลในขอบเขต GxP เข้าเครื่องมือที่ยังไม่ผ่านการประเมิน</span></li>
     <li><b>เราจะรู้ได้ยังไงว่าที่มันตอบถูก</b>
       <span class="note">สั่งให้อ้างอิงแถวหรือหน้าที่มา แล้วเปิดไฟล์ตรวจจริง · งานที่ตรวจไม่ได้ ไม่ใช้</span></li>
-  </ol>
-</section>
-
-<section class="slide" data-sec="ปิดวง">
-  <div class="kicker">ถ้าจะขยายไปทั้งองค์กร</div>
-  <h2>ลำดับที่ทำได้ในหนึ่งไตรมาส</h2>
-  <ol class="big">
-    <li><b>เขียนกติกา 3 ถังให้เป็นลายลักษณ์อักษร</b><span class="note">แดง ห้ามเด็ดขาด · เหลือง ตัดข้อมูลระบุตัวก่อน · เขียว ใส่ได้ — ตามที่ตกลงกันไว้ตอนเช้า<br>รายงานประชุมวาระที่ 8 มอบหมายไว้แล้ว ใช้ของวันนี้เป็นตัวตั้งได้</span></li>
-    <li><b>เลือกกลุ่มนำร่อง 1 ฝ่ายที่งานไม่แตะข้อมูล GxP</b><span class="note">เช่นงานเอกสารโต้ตอบลูกค้าต่างประเทศ</span></li>
-    <li><b>ย้ายกลุ่มนำร่องไปใช้แผนสำหรับองค์กร</b><span class="note">เพื่อให้ IT จัดการสมาชิกและตั้งค่าได้</span></li>
-    <li><b>วัดผลด้วยเวลาที่ประหยัดได้จริง</b><span class="note">ไม่ใช่วัดด้วยจำนวนคนที่สมัคร</span></li>
   </ol>
 </section>
 
