@@ -106,6 +106,15 @@ ul.big li::before{
 li b{font-weight:700}
 li .note{display:block;font-size:.8em;color:var(--ink-3);margin-top:4px;line-height:1.45}
 
+.bk .way{
+  display:inline-block;font-family:"IBM Plex Mono",monospace;font-size:.72em;font-weight:600;
+  letter-spacing:.06em;padding:1px 7px;margin-right:6px;border-radius:2px;
+  background:var(--accent);color:var(--ground);
+}
+ol.big.qa li{padding-top:14px;padding-bottom:14px;font-size:clamp(15px,1.45vw,20px)}
+ol.big.qa li::before{top:16px}
+ol.big.qa li .note{font-size:.82em}
+
 /* prompt boxes */
 .prompt{
   border:1px solid var(--line-2);background:var(--surface);padding:20px 24px;
@@ -151,6 +160,19 @@ td.num{white-space:nowrap;font-family:"IBM Plex Mono",monospace;font-variant-num
 .callout b{color:var(--hold)}
 
 /* ---------- รูปกล้วย ---------- */
+/* กล้วยประจำทุกสไลด์ — ฝังเป็น data URI เพราะหน้า Artifact โหลดรูปจากภายนอกไม่ได้
+   สไลด์เปิดและสไลด์ปิดมีกล้วยตัวใหญ่ของตัวเองอยู่แล้ว จึงปิด ::after ไว้ */
+.slide::after{
+  content:"";position:absolute;right:22px;bottom:clamp(92px,11vh,116px);
+  width:clamp(84px,9vw,132px);height:clamp(84px,9vw,132px);
+  background:url("data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%20240%20240%22%3E%3Cpath%20d=%22M63%2040%20C%2056%2024%2062%2012%2076%2012%20C%2088%2012%2094%2020%2094%2030%22%20fill=%22none%22%20stroke=%22%237A5A16%22%20stroke-width=%2211%22%20stroke-linecap=%22round%22/%3E%3Cpath%20d=%22M64%2036%20C%2046%20104%2084%20174%20160%20198%20C%20186%20206%20202%20192%20194%20172%20C%20146%20154%20106%20110%2090%2048%20C%2085%2030%2068%2024%2064%2036%20Z%22%20fill=%22%23F5C93B%22/%3E%3Cpath%20d=%22M76%2052%20C%2062%20112%2096%20168%20164%20188%20C%20176%20191%20184%20186%20181%20178%20C%20130%20158%2098%20110%2084%2056%20Z%22%20fill=%22%23E2A81F%22/%3E%3Cpath%20d=%22M191%20170%20C%20200%20168%20208%20176%20205%20186%20C%20202%20194%20192%20196%20186%20190%20Z%22%20fill=%22%236B4E12%22/%3E%3C/svg%3E") no-repeat center/contain;
+  opacity:.5;pointer-events:none;z-index:0;
+}
+.slide.title::after{display:none}
+.divider::after{opacity:.42}
+@media (max-width:760px){.slide::after{width:60px;height:60px;right:12px;bottom:78px;opacity:.35}}
+
+
 .banana{
   position:absolute;right:clamp(-70px,-3vw,-16px);bottom:clamp(-70px,-4vw,-24px);
   width:clamp(220px,34vw,470px);height:auto;pointer-events:none;z-index:0;
@@ -232,7 +254,7 @@ html:not(.js) .hint{display:none}
   <div class="kicker">วันนี้มีสองเป้า</div>
   <h2>เข้าใจการใช้งาน Claude</h2>
   <ol class="big">
-    <li><b>จบวันแล้วท่านใช้ได้จริง</b><span class="note">มี Claude Project ของงานตัวเอง 1 ชิ้น ที่ใช้ได้วันจันทร์</span></li>
+    <li><b>จบวันแล้วท่านสามารถใช้ได้จริง เข้าใจภาพรวมการใช้งาน</b><span class="note">มี Claude Project ของงานตัวเอง 1 ชิ้น ที่ใช้ได้วันจันทร์</span></li>
     <li><b>จบวันแล้วท่านตัดสินใจได้</b><span class="note">เห็นว่าถ้าบริษัทเราเอาเข้ามา จะเปลี่ยนอะไร และเสี่ยงตรงไหน</span></li>
   </ol>
 </section>
@@ -240,28 +262,31 @@ html:not(.js) .hint{display:none}
 <section class="slide" data-sec="เปิด">
   <div class="kicker">รอบวง · 10 นาที</div>
   <h2>งานอะไรที่กินเวลาท่าน<br>มากที่สุดในสัปดาห์</h2>
-  <p class="sub">เขียนขึ้นบอร์ดทั้ง 5 ข้อ ตอนบ่ายเราจะกลับมาใช้ลิสต์นี้</p>
+  <p class="sub">เขียนงานที่ใช้เวลามากที่สุดที่นึกออก 3 ข้อ</p>
 </section>
 
 <section class="slide" data-sec="กติกาข้อมูล">
-  <div class="kicker">ก่อนแตะแป้นพิมพ์</div>
+  <div class="kicker">ก่อนเริ่มใช้งาน</div>
   <h2>ข้อมูลอะไรใส่ได้ ใส่ไม่ได้</h2>
   <div class="buckets">
     <div class="bk r"><div class="name">ห้ามเด็ดขาด</div>
       <div class="ex">สูตรตำรับ · ข้อมูลทะเบียนยาและ DMF · batch record · ผล stability · ข้อมูลผู้ป่วยที่ระบุตัวได้<br>
-      <b>ห้ามพิมพ์ ห้ามอัปโหลด บนบัญชีส่วนตัว</b></div></div>
+      <b>ห้ามพิมพ์ ห้ามอัปโหลด บนบัญชีส่วนตัว</b><br>
+      <span class="way">วิธีเลี่ยง</span> ถามเป็นหลักการโดยไม่ใส่ของจริง เช่น “รายงานสอบสวนข้อร้องเรียนที่ดีควรมีหัวข้ออะไรบ้าง”
+      แล้วเอาโครงที่ได้ไปกรอกข้อมูลจริงเองในเครื่อง</div></div>
     <div class="bk a"><div class="name">ตัดข้อมูลระบุตัวก่อน</div>
       <div class="ex">ยอดขายรายลูกค้า · ทะเบียนข้อร้องเรียน · ราคาซัพพลายเออร์ · ชื่อตัวแทนจำหน่าย<br>
-      ลบชื่อและรหัสจริงออกก่อน</div></div>
+      ลบชื่อและรหัสจริงออกก่อน<br>
+      <span class="way">ตัวอย่าง</span> “Golden Bough Pharma ย่างกุ้ง” → “ลูกค้า A ตลาดส่งออก” · “GTM-2568-0416” → “รุ่นผลิตที่ 1”</div></div>
     <div class="bk g"><div class="name">ใส่ได้</div>
       <div class="ex">ประกาศและหลักเกณฑ์ที่เผยแพร่สาธารณะ · ร่างงานเขียนทั่วไป · ข้อมูลที่ไม่ระบุตัวตน</div></div>
   </div>
 </section>
 
 <section class="slide statement" data-sec="กติกาข้อมูล">
-  <div class="kicker">ประโยคที่ต้องจำ</div>
+  <div class="kicker">ข้อตกลงร่วมกัน ทิศทางการใช้</div>
   <h2>AI ร่างได้<br>คนเซ็นชื่อ<br>คือคนรับผิดชอบ</h2>
-  <div class="who">เอกสารที่เข้าระบบคุณภาพต้องผ่านคนตรวจเสมอ · นี่คือเรื่องที่ auditor จะถาม</div>
+  <div class="who">และเอกสารที่เข้าระบบคุณภาพต้องผ่านคนตรวจเสมอ</div>
 </section>
 
 <section class="slide" data-sec="ทัวร์หน้าจอ">
@@ -533,12 +558,21 @@ html:not(.js) .hint{display:none}
 <section class="slide" data-sec="ปิดวง">
   <div class="kicker">ห้าคำถามที่ต้องมีคำตอบ</div>
   <h2>ก่อนผลักเรื่องนี้ต่อในองค์กร</h2>
-  <ol class="big">
-    <li><b>ข้อมูลที่เราพิมพ์เข้าไป จะถูกเอาไปใช้ฝึกโมเดลไหม</b></li>
-    <li><b>ถ้าเอามาใช้ทั้งบริษัท ต้องจ่ายเท่าไหร่</b></li>
-    <li><b>IT จะควบคุมได้แค่ไหน ดูได้ไหมว่าใครใช้อะไร</b></li>
-    <li><b>ถ้า auditor ถามว่าใช้ AI ทำเอกสารไหม เราตอบว่าอะไร</b></li>
-    <li><b>เราจะรู้ได้ยังไงว่าที่มันตอบถูก</b></li>
+  <ol class="big qa">
+    <li><b>ข้อมูลที่เราพิมพ์เข้าไป จะถูกเอาไปใช้ฝึกโมเดลไหม</b>
+      <span class="note">ตั้งค่าได้เองในหน้าความเป็นส่วนตัวของบัญชี และแผนสำหรับองค์กรมีเงื่อนไขต่างจากบัญชีส่วนตัว
+      — เปิดหน้าตั้งค่าจริงดูด้วยกันในห้อง ไม่ตอบจากความจำ</span></li>
+    <li><b>ถ้าเอามาใช้ทั้งบริษัท ต้องจ่ายเท่าไหร่</b>
+      <span class="note">คิดเป็นรายผู้ใช้ต่อเดือน ราคาปัจจุบันดูที่ <b>claude.com/pricing</b>
+      — คำถามที่ควรถามคือเทียบกับเวลาที่ประหยัดได้เท่าไหร่ ไม่ใช่แพงหรือไม่แพง</span></li>
+    <li><b>IT จะควบคุมได้แค่ไหน ดูได้ไหมว่าใครใช้อะไร</b>
+      <span class="note">บัญชีส่วนตัวควบคุมไม่ได้เลย บริษัทไม่รู้ว่าใครใช้ ใช้กับข้อมูลอะไร และระงับสิทธิ์ตอนลาออกไม่ได้
+      — ต้องย้ายไปแผนสำหรับองค์กรจึงจะจัดการสมาชิกจากศูนย์กลางได้</span></li>
+    <li><b>ถ้า auditor ถามว่าใช้ AI ทำเอกสารไหม เราตอบว่าอะไร</b>
+      <span class="note">ตอบว่าใช้เป็นเครื่องมือช่วยร่าง ไม่ใช่ระบบที่ใช้ตัดสินคุณภาพ · เอกสารทุกฉบับผ่านการตรวจและอนุมัติ
+      ตามระบบคุณภาพเหมือนเดิม · ไม่นำข้อมูลในขอบเขต GxP เข้าเครื่องมือที่ยังไม่ผ่านการประเมิน</span></li>
+    <li><b>เราจะรู้ได้ยังไงว่าที่มันตอบถูก</b>
+      <span class="note">สั่งให้อ้างอิงแถวหรือหน้าที่มา แล้วเปิดไฟล์ตรวจจริง · งานที่ตรวจไม่ได้ ไม่ใช้</span></li>
   </ol>
 </section>
 
@@ -546,7 +580,7 @@ html:not(.js) .hint{display:none}
   <div class="kicker">ถ้าจะขยายไปทั้งองค์กร</div>
   <h2>ลำดับที่ทำได้ในหนึ่งไตรมาส</h2>
   <ol class="big">
-    <li><b>เขียนกติกา 3 ถังให้เป็นลายลักษณ์อักษร</b><span class="note">รายงานประชุมวาระที่ 8 มอบหมายไว้แล้ว ใช้ของวันนี้เป็นตัวตั้งได้</span></li>
+    <li><b>เขียนกติกา 3 ถังให้เป็นลายลักษณ์อักษร</b><span class="note">แดง ห้ามเด็ดขาด · เหลือง ตัดข้อมูลระบุตัวก่อน · เขียว ใส่ได้ — ตามที่ตกลงกันไว้ตอนเช้า<br>รายงานประชุมวาระที่ 8 มอบหมายไว้แล้ว ใช้ของวันนี้เป็นตัวตั้งได้</span></li>
     <li><b>เลือกกลุ่มนำร่อง 1 ฝ่ายที่งานไม่แตะข้อมูล GxP</b><span class="note">เช่นงานเอกสารโต้ตอบลูกค้าต่างประเทศ</span></li>
     <li><b>ย้ายกลุ่มนำร่องไปใช้แผนสำหรับองค์กร</b><span class="note">เพื่อให้ IT จัดการสมาชิกและตั้งค่าได้</span></li>
     <li><b>วัดผลด้วยเวลาที่ประหยัดได้จริง</b><span class="note">ไม่ใช่วัดด้วยจำนวนคนที่สมัคร</span></li>
