@@ -1,0 +1,1284 @@
+<title>Autonomous Work with Claude Cowork</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  /* ธีมตามต้นแบบ: พื้นดำน้ำเงินเข้ม สีเน้นส้ม — ธีมเดียว ไม่สลับตามเครื่องผู้ชม
+     เพราะเป็นสไลด์ฉายขึ้นจอ ต้องเหมือนกันทุกเครื่องที่เปิด */
+  --bg:#0A0E15;
+  --card:#141A26;
+  --card-2:#111722;
+  --line:rgba(255,255,255,.07);
+  --line-2:rgba(255,255,255,.14);
+  --ink:#FFFFFF;
+  --ink-2:#A9B2C3;
+  --ink-3:#6C7689;
+  --accent:#E8825A;
+  --accent-2:#F09A6E;
+  --accent-soft:rgba(232,130,90,.09);
+  --teal:#3FBFA0;
+  --violet:#8B7BE8;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{
+  background:var(--bg);color:var(--ink);
+  font-family:"IBM Plex Sans Thai","Poppins",system-ui,sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3{margin:0;text-wrap:balance;font-weight:700;letter-spacing:-.01em}
+.mono{font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums}
+
+/* ---------- deck ---------- */
+.deck{padding-bottom:60px}
+.slide{
+  position:relative;min-height:100vh;display:flex;flex-direction:column;justify-content:center;
+  padding-block:clamp(40px,6vw,80px) clamp(96px,11vw,130px);
+  padding-inline:max(clamp(28px,6vw,110px),calc((100% - 1560px) / 2));
+  overflow:hidden;
+}
+html.js .slide{display:none}
+html.js .slide.on{display:flex;animation:fade .3s ease-out}
+@keyframes fade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){html.js .slide.on{animation:none}}
+/* แสงเรืองมุมจอตามต้นแบบ */
+.slide::before{
+  content:"";position:absolute;inset:0;pointer-events:none;z-index:0;
+  background:
+    radial-gradient(900px 520px at 88% 8%, rgba(232,130,90,.13), transparent 62%),
+    radial-gradient(760px 480px at 6% 96%, rgba(63,191,160,.08), transparent 60%);
+}
+.slide > *{position:relative;z-index:1}
+
+/* ---------- eyebrow ---------- */
+.eyebrow{
+  font-family:"Poppins","IBM Plex Sans Thai",sans-serif;
+  font-size:clamp(12px,1.05vw,15px);font-weight:600;
+  letter-spacing:.2em;text-transform:uppercase;color:var(--accent);
+  margin-bottom:clamp(16px,1.8vw,26px);
+}
+
+/* ---------- headings ---------- */
+.slide h1{font-size:clamp(40px,5.6vw,82px);line-height:1.1;font-weight:800;
+  font-family:"Poppins","IBM Plex Sans Thai",sans-serif}
+.slide h1 .hl{color:var(--accent)}
+.slide h2{font-size:clamp(30px,3.9vw,58px);line-height:1.18;font-weight:700}
+.slide h2 .hl{color:var(--accent)}
+.lead{font-size:clamp(16px,1.5vw,23px);color:var(--ink-2);line-height:1.65;
+  max-width:60ch;margin:clamp(16px,2vw,28px) 0 0;font-weight:300}
+.lead b,.lead strong{color:var(--ink);font-weight:600}
+.lead .hl{color:var(--accent);font-weight:600}
+
+/* ---------- ปกและชิป ---------- */
+.brandmark{
+  width:clamp(62px,5vw,88px);height:clamp(62px,5vw,88px);border-radius:20px;
+  background:linear-gradient(150deg,#F09A6E,#D96C46);
+  display:grid;place-items:center;margin-bottom:clamp(26px,3.4vw,52px);
+  box-shadow:0 12px 40px rgba(232,130,90,.28);
+}
+.brandmark svg{width:52%;height:52%;fill:none;stroke:#fff;stroke-width:2.1;stroke-linecap:round}
+.chips{display:flex;flex-wrap:wrap;gap:12px;margin-top:clamp(26px,3vw,42px)}
+.chip{
+  font-family:"Poppins",sans-serif;font-weight:600;font-size:clamp(13px,1.15vw,17px);
+  padding:9px 20px;border-radius:999px;border:1.6px solid;
+}
+.chip.c1{color:var(--accent);border-color:var(--accent)}
+.chip.c2{color:var(--teal);border-color:var(--teal)}
+.chip.c3{color:var(--violet);border-color:var(--violet)}
+
+/* ---------- ตัวเลข Part แบบเส้นขอบ ---------- */
+.bignum{
+  font-family:"Poppins",sans-serif;font-weight:800;
+  font-size:clamp(88px,11vw,170px);line-height:.9;
+  color:transparent;-webkit-text-stroke:3px var(--accent);
+  margin-bottom:clamp(10px,1.4vw,22px);
+}
+
+/* ---------- การ์ด ---------- */
+.grid{display:grid;gap:clamp(14px,1.5vw,24px);margin-top:clamp(20px,2.6vw,38px)}
+.g2{grid-template-columns:repeat(2,1fr)}
+@media (max-width:900px){.g2{grid-template-columns:1fr}}
+.g3{grid-template-columns:repeat(auto-fit,minmax(290px,1fr))}
+.card{
+  background:var(--card);border:1px solid var(--line);border-radius:16px;
+  padding:clamp(18px,1.9vw,30px) clamp(20px,2vw,32px);
+}
+.card.on{border-color:var(--accent);background:linear-gradient(160deg,rgba(232,130,90,.10),rgba(232,130,90,.03))}
+.card h3{font-size:clamp(18px,1.75vw,27px);line-height:1.3;margin-bottom:10px;display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+.card h3:has(.ico){display:grid;grid-template-columns:auto 1fr;align-items:center}
+.card p{margin:0;font-size:clamp(14px,1.25vw,19px);line-height:1.6;color:var(--ink-2);font-weight:300}
+.card p + p{margin-top:10px}
+.card p b{color:var(--ink);font-weight:600}
+.ico{
+  width:clamp(38px,3.2vw,50px);height:clamp(38px,3.2vw,50px);border-radius:13px;flex:none;
+  display:grid;place-items:center;font-size:clamp(19px,1.6vw,25px);background:#1D2534;
+}
+.ico.o{background:rgba(232,130,90,.16)} .ico.t{background:rgba(63,191,160,.16)}
+.ico.v{background:rgba(139,123,232,.16)} .ico.y{background:rgba(232,190,90,.16)}
+
+/* ---------- รายการมีเลขวงกลม ---------- */
+.numlist{list-style:none;padding:0;margin:clamp(20px,2.4vw,34px) 0 0;display:grid;gap:clamp(12px,1.2vw,18px)}
+.numlist li{
+  background:var(--card);border:1px solid var(--line);border-radius:14px;
+  padding:clamp(15px,1.5vw,22px) clamp(18px,1.8vw,26px);
+  display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:start;
+}
+.numlist li::before{
+  content:counter(ni);counter-increment:ni;
+  font-family:"Poppins",sans-serif;font-weight:700;font-size:clamp(13px,1.1vw,16px);
+  width:clamp(28px,2.3vw,34px);height:clamp(28px,2.3vw,34px);border-radius:50%;
+  background:var(--accent);color:#12161F;display:grid;place-items:center;margin-top:2px;
+}
+.numlist{counter-reset:ni}
+.numlist b{display:block;font-size:clamp(16px,1.5vw,22px);font-weight:600;margin-bottom:5px}
+.numlist span{font-size:clamp(13.5px,1.2vw,18px);color:var(--ink-2);line-height:1.55;font-weight:300}
+
+/* ---------- ตาราง ---------- */
+.tw{overflow-x:auto;border:1px solid var(--line);border-radius:14px;margin-top:clamp(20px,2.4vw,32px);background:var(--card-2)}
+table{border-collapse:collapse;width:100%;min-width:560px;font-size:clamp(14px,1.25vw,19px)}
+th{text-align:left;font-weight:600;font-size:clamp(12.5px,1.05vw,16px);color:var(--ink-2);
+  padding:14px 20px;background:rgba(255,255,255,.03);border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:14px 20px;border-bottom:1px solid var(--line);color:var(--ink-2);font-weight:300;vertical-align:top}
+td b{color:var(--ink);font-weight:600}
+tr:last-child td{border-bottom:none}
+td.n{white-space:nowrap;font-family:"IBM Plex Mono",monospace;color:var(--accent)}
+
+/* ---------- กล่องเน้น ---------- */
+.note{
+  margin-top:clamp(18px,2.2vw,30px);border-left:4px solid var(--accent);
+  background:var(--accent-soft);border-radius:0 12px 12px 0;
+  padding:clamp(14px,1.5vw,22px) clamp(18px,1.8vw,26px);
+  font-size:clamp(14px,1.3vw,20px);line-height:1.6;color:var(--ink-2);font-weight:300;
+}
+.note b{color:var(--accent);font-weight:600}
+.note.warn{border-left-color:#E05C4B;background:rgba(224,92,75,.09)}
+.note.warn b{color:#F0796A}
+
+/* ---------- prompt ---------- */
+.prompt{
+  margin-top:clamp(18px,2.2vw,28px);border:1px solid var(--line-2);border-radius:14px;
+  background:var(--card-2);padding:clamp(18px,1.9vw,28px);
+  font-size:clamp(15px,1.4vw,21px);line-height:1.6;color:var(--ink);font-weight:300;position:relative;
+}
+.prompt .lb{
+  position:absolute;top:-11px;left:20px;background:var(--bg);padding:0 10px;
+  font-family:"Poppins",sans-serif;font-size:11.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+}
+.prompt.bad{border-color:rgba(224,92,75,.5)} .prompt.bad .lb{color:#F0796A}
+.prompt.good{border-color:rgba(63,191,160,.5)} .prompt.good .lb{color:var(--teal)}
+
+/* ---------- แผนภาพ ---------- */
+.ig{width:100%;max-width:1180px;height:auto;margin-top:clamp(18px,2.4vw,32px);display:block}
+.ig .bx{fill:var(--card);stroke:var(--line-2);stroke-width:1.4}
+.ig .hl{fill:rgba(232,130,90,.12);stroke:var(--accent);stroke-width:1.8}
+.ig .ar{stroke:var(--accent);stroke-width:2.4;fill:none;marker-end:url(#ar)}
+.ig text{font-family:"IBM Plex Sans Thai",sans-serif;fill:var(--ink)}
+.ig .t1{font-size:19px;font-weight:600}
+.ig .t2{font-size:15px;fill:var(--ink-2);font-weight:300}
+.ig .t3{font-size:12.5px;fill:var(--ink-3);font-family:"IBM Plex Mono",monospace;letter-spacing:.1em}
+.ig .ta{font-size:16px;fill:var(--accent);font-weight:600}
+
+/* ---------- องค์ประกอบเพิ่มตามต้นแบบ ---------- */
+.split{display:grid;grid-template-columns:1.1fr .9fr;gap:clamp(16px,2vw,30px);align-items:start;margin-top:clamp(20px,2.4vw,34px)}
+.bigemoji{font-size:clamp(84px,9vw,150px);line-height:1;text-align:center;align-self:center}
+.userbox{
+  background:var(--card);border:1px solid var(--line);border-left:3px solid var(--teal);
+  border-radius:12px;padding:clamp(16px,1.7vw,24px) clamp(18px,1.8vw,26px);
+}
+.userbox .who{color:var(--teal);font-weight:600;font-size:clamp(13px,1.1vw,16px);margin-bottom:8px}
+.userbox .msg{font-family:"IBM Plex Mono",monospace;font-size:clamp(15px,1.35vw,21px);color:var(--ink)}
+.listcard ul{margin:0;padding-left:20px}
+.listcard li{color:var(--ink-2);font-weight:300;font-size:clamp(14px,1.25vw,19px);line-height:1.6;margin-bottom:9px}
+.listcard li:last-child{margin-bottom:0}
+.listcard h3{margin-bottom:14px}
+.card.wide{grid-column:1/-1}
+.foot{margin-top:clamp(16px,1.8vw,26px);color:var(--ink-3);font-size:clamp(13px,1.15vw,17px);font-weight:300}
+.ck{color:#4ADE80;font-weight:600}
+.dash{color:var(--ink-3)}
+h2 .tl{color:var(--teal)} h2 .vl{color:var(--violet)}
+.steps{font-size:clamp(14px,1.25vw,19px);color:var(--ink-2);font-weight:300;line-height:1.9}
+.steps b{color:var(--ink);font-weight:600}
+
+.price .amt{font-family:"Poppins",sans-serif;font-weight:800;font-size:clamp(26px,2.7vw,42px);margin:4px 0 14px;color:var(--ink)}
+.price .amt .per{font-size:.42em;font-weight:500;color:var(--ink-2)}
+.card.on .amt{color:var(--accent)}
+h2 .sm{font-size:.42em;font-weight:500;color:var(--ink-2);letter-spacing:0}
+h2 .sm .hl{color:var(--accent)}
+.cnum{color:var(--accent)}
+.quote{color:var(--ink-2);font-weight:300}
+
+/* ---------- แถบบนและแถบล่าง ---------- */
+.pbar{position:fixed;top:0;left:0;height:3px;z-index:30;
+  background:linear-gradient(90deg,var(--teal),var(--accent));transition:width .25s ease}
+.bottom{
+  position:fixed;left:0;right:0;bottom:0;height:56px;z-index:30;
+  display:flex;align-items:center;gap:14px;padding:0 clamp(16px,2vw,32px);
+  background:rgba(10,14,21,.92);border-top:1px solid var(--line);
+  backdrop-filter:blur(8px);
+}
+.bottom .name{color:var(--ink-3);font-size:clamp(12px,1.05vw,15px);font-weight:300;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bottom .sp{flex:1}
+.bottom .cnt{color:var(--ink-2);font-size:clamp(12px,1.05vw,15px);white-space:nowrap;font-weight:300}
+.bottom .cnt b{color:var(--ink);font-weight:600}
+.bottom button,.keyhint{
+  font:inherit;font-size:clamp(12px,1.05vw,15px);font-weight:400;
+  background:rgba(255,255,255,.05);color:var(--ink-2);
+  border:1px solid var(--line-2);border-radius:8px;padding:7px 13px;
+}
+.bottom button{cursor:pointer}
+.bottom button:hover{background:rgba(255,255,255,.11);color:var(--ink)}
+.bottom button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.side{
+  position:fixed;top:50%;transform:translateY(-50%);z-index:29;
+  width:clamp(40px,3.4vw,54px);height:clamp(40px,3.4vw,54px);border-radius:50%;
+  background:rgba(255,255,255,.04);border:1px solid var(--line-2);color:var(--ink-2);
+  display:grid;place-items:center;cursor:pointer;font-size:clamp(17px,1.5vw,22px);
+}
+.side:hover{background:rgba(255,255,255,.1);color:var(--ink)}
+.side:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.side.l{left:clamp(10px,1.4vw,26px)} .side.r{right:clamp(10px,1.4vw,26px)}
+html:not(.js) .bottom,html:not(.js) .side,html:not(.js) .pbar{display:none}
+
+/* ---------- ป้ายโหมดข้าง Workshop # ---------- */
+.eyebrow.row{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.tag{
+  font-family:"Poppins","IBM Plex Sans Thai",sans-serif;font-weight:600;
+  font-size:clamp(11.5px,1vw,14.5px);letter-spacing:.14em;text-transform:uppercase;
+  padding:7px 18px;border-radius:999px;border:1.5px solid var(--accent);color:var(--accent);
+  line-height:1;
+}
+.tag.t{border-color:var(--teal);color:var(--teal)}
+.tag.v{border-color:var(--violet);color:var(--violet)}
+
+/* ---------- กล่อง Prompt แบบขีดข้างซ้าย (ใช้ในหมวด Workshop) ---------- */
+.pbox{
+  margin-top:clamp(16px,1.9vw,26px);background:var(--card-2);
+  border:1px solid var(--line);border-left:3px solid var(--teal);border-radius:12px;
+  padding:clamp(16px,1.7vw,24px) clamp(18px,1.9vw,28px);
+}
+.pbox .lb{
+  font-family:"IBM Plex Mono",monospace;color:var(--teal);
+  font-size:clamp(12px,1.05vw,15px);letter-spacing:.09em;margin-bottom:11px;
+}
+.pbox .tx{
+  font-family:"IBM Plex Mono",monospace;color:var(--ink);
+  font-size:clamp(14px,1.3vw,20px);line-height:1.75;
+}
+.pbox .tx .hl{color:var(--accent)}
+
+/* ---------- กริด 4 คอลัมน์ (แผนที่ Workshop) ---------- */
+.g4{grid-template-columns:repeat(4,1fr)}
+@media (max-width:1240px){.g4{grid-template-columns:repeat(2,1fr)}}
+.ico.g{background:rgba(74,222,128,.16)}
+.ico.r{background:rgba(224,92,75,.16)}
+.card h3 .num{font-family:"Poppins",sans-serif;font-weight:800;color:var(--ink)}
+
+/* ---------- ลิงก์ท้ายเล่ม ---------- */
+a.chip{text-decoration:none}
+a.chip:hover{background:rgba(255,255,255,.06)}
+
+/* ---------- จอเตี้ย (โปรเจกเตอร์ 1600x900 หรือโน้ตบุ๊ก): บีบระยะแนวตั้งให้พอดีหน้าเดียว ---------- */
+@media (max-height:980px){
+  .slide{padding-block:clamp(26px,3.6vw,50px) 82px}
+  .eyebrow{margin-bottom:14px}
+  .lead{margin-top:14px;line-height:1.55}
+  .grid{margin-top:18px;gap:14px}
+  .numlist{margin-top:18px;gap:10px}
+  .numlist li{padding:12px 18px}
+  .numlist b{margin-bottom:3px}
+  .card{padding:16px 20px}
+  .pbox{margin-top:14px;padding:14px 20px}
+  .pbox .lb{margin-bottom:8px}
+  .pbox .tx{line-height:1.62}
+  .prompt,.note,.tw{margin-top:14px}
+  .foot{margin-top:12px}
+  .split{margin-top:18px}
+  .bignum{margin-bottom:8px}
+  .brandmark{margin-bottom:22px}
+  .chips{margin-top:22px}
+}
+
+@media (max-width:820px){
+  .g2,.g3,.g4{grid-template-columns:1fr}
+  .side{display:none}
+  .bottom .name{display:none}
+}
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <marker id="ar" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+    <path d="M0 0L10 5L0 10z" fill="#E8825A"/>
+  </marker>
+</defs></svg>
+
+<div class="deck">
+
+<!-- 1 ================= ปก ================= -->
+<section class="slide on" data-part="ปก">
+  <div class="brandmark"><svg viewBox="0 0 24 24"><path d="M12 3v18M3 12h18M5.6 5.6l12.8 12.8M18.4 5.6L5.6 18.4"/></svg></div>
+  <div class="eyebrow">Beginner Training Course</div>
+  <h1>Autonomous Work with<br><span class="hl">Claude Cowork</span></h1>
+  <p class="lead">เรียนรู้การใช้ AI ทำงานแทนเราแบบอัตโนมัติ ตั้งแต่พื้นฐานจนถึงลงมือทำจริง<br>
+  พร้อม Workshop 8 กิจกรรม สำหรับผู้เริ่มต้น</p>
+  <div class="chips">
+    <span class="chip c1">Claude Chat</span>
+    <span class="chip c2">Claude Cowork</span>
+    <span class="chip c3">Claude Code</span>
+  </div>
+</section>
+
+<!-- 2 ================= Agenda ================= -->
+<section class="slide" data-part="Agenda">
+  <div class="eyebrow">Agenda</div>
+  <h2>วันนี้เราจะเรียนอะไรกันบ้าง</h2>
+  <div class="grid g3">
+    <div class="card"><h3><span class="ico o">🧭</span>Part 1 — พื้นฐาน Claude</h3>
+      <p>รู้จัก Claude, โมเดลต่างๆ และ UI ทุกส่วนที่ต้องใช้เป็น</p></div>
+    <div class="card"><h3><span class="ico t">⚖️</span>Part 2 — Chat vs Cowork vs Code</h3>
+      <p>ความแตกต่างของ 3 โหมด, Pricing &amp; Plans และสิ่งที่มือใหม่ต้องรู้</p></div>
+    <div class="card"><h3><span class="ico y">⚡</span>Part 3 — 10 ความสามารถของ Cowork</h3>
+      <p>อะไรที่ทำให้ Cowork เหนือกว่า AI แชทธรรมดา</p></div>
+    <div class="card"><h3><span class="ico v">🧩</span>Part 4 — Skill &amp; Connector</h3>
+      <p>ต่อความสามารถเพิ่ม: Skill คืออะไร ติดตั้งจากไหน และ MCP / Connector / Plugin</p></div>
+    <div class="card"><h3><span class="ico o">🛠️</span>Part 5 — Workshop 8 กิจกรรม</h3>
+      <p>ลงมือทำจริง: สไลด์, เอกสาร, วิเคราะห์ข้อมูล, เว็บ, อีเมล, Research อัตโนมัติ</p></div>
+  </div>
+</section>
+
+<!-- 3 ================= Part 1 divider ================= -->
+<section class="slide" data-part="Part 1">
+  <div class="bignum">01</div>
+  <h2>พื้นฐาน <span class="hl">Claude</span></h2>
+  <p class="lead">ก่อนจะให้ AI ทำงานแทนเรา ต้องรู้จักเครื่องมือให้ครบทุกปุ่มก่อน</p>
+</section>
+
+<!-- 4 -->
+<section class="slide" data-part="Part 1">
+  <div class="eyebrow">Part 1 · พื้นฐาน</div>
+  <h2>Claude คืออะไร?</h2>
+  <p class="lead">Claude คือ AI ผู้ช่วยอัจฉริยะ พัฒนาโดยบริษัท <span class="hl">Anthropic</span> (สหรัฐอเมริกา)
+  เน้นความปลอดภัยและความน่าเชื่อถือ</p>
+  <ol class="numlist">
+    <li><div><b>คุยโต้ตอบได้เหมือนคน</b><span>ถาม-ตอบ วิเคราะห์ สรุป แปลภาษา รวมถึงภาษาไทย</span></div></li>
+    <li><div><b>เข้าใจไฟล์และรูปภาพ</b><span>อ่าน PDF, เอกสาร, ตาราง, รูปถ่าย แล้ววิเคราะห์ให้ได้</span></div></li>
+    <li><div><b>ลงมือทำงานได้จริง</b><span>เขียนโค้ด สร้างไฟล์ ค้นเว็บ — ไม่ใช่แค่ตอบข้อความ</span></div></li>
+  </ol>
+</section>
+
+<!-- 5 -->
+<section class="slide" data-part="Part 1">
+  <div class="eyebrow">Part 1 · พื้นฐาน</div>
+  <h2>โมเดลของ Claude — เลือกใช้ตามงาน</h2>
+  <div class="grid g2">
+    <div class="card on"><h3><span class="ico o">👑</span>Claude Fable 5 / Opus</h3>
+      <p>ฉลาดที่สุด เหมาะกับงานซับซ้อน วิเคราะห์ลึก เขียนโค้ดใหญ่ๆ งานที่ต้องคิดหลายขั้น</p></div>
+    <div class="card"><h3><span class="ico t">🎯</span>Claude Sonnet</h3>
+      <p>สมดุลระหว่างความฉลาดกับความเร็ว เหมาะกับงานทั่วไปประจำวัน — เป็นค่าเริ่มต้นของแผนส่วนใหญ่</p></div>
+    <div class="card"><h3><span class="ico v">🚀</span>Claude Haiku</h3>
+      <p>เร็วและประหยัดที่สุด เหมาะกับงานง่ายๆ ตอบสั้น สรุปเร็ว</p></div>
+    <div class="card"><h3><span class="ico y">💡</span>เคล็ดลับมือใหม่</h3>
+      <p>ไม่ต้องจำเยอะ: งานสำคัญใช้ตัวฉลาด งานเร่งใช้ตัวเร็ว เปลี่ยนโมเดลได้จากเมนูในช่องพิมพ์ข้อความ</p></div>
+  </div>
+</section>
+
+<!-- 6 ================= ใช้ Claude ได้จากที่ไหนบ้าง ================= -->
+<section class="slide" data-part="Part 1">
+  <div class="eyebrow">Part 1 · พื้นฐาน</div>
+  <h2>ใช้ <span class="hl">Claude</span> ได้จากที่ไหนบ้าง</h2>
+  <div class="grid g3">
+    <div class="card"><h3><span class="ico t">🌐</span>เว็บไซต์</h3>
+      <p>claude.ai — ใช้ผ่านเบราว์เซอร์ ไม่ต้องติดตั้งอะไร</p></div>
+    <div class="card"><h3><span class="ico t">💻</span>Desktop App</h3>
+      <p>แอปบน Windows / Mac — <b style="color:var(--teal)">โหมด Cowork อยู่ที่นี่!</b> ใช้ในคอร์สนี้เป็นหลัก</p></div>
+    <div class="card"><h3><span class="ico v">📱</span>มือถือ</h3>
+      <p>แอป iOS และ Android คุยได้ทุกที่</p></div>
+    <div class="card"><h3><span class="ico y">⌨️</span>Claude Code</h3>
+      <p>เครื่องมือสำหรับงานโค้ดจริงจัง ใช้ผ่าน Terminal (Workshop 5)</p></div>
+    <div class="card"><h3><span class="ico t">🧩</span>Chrome Extension</h3>
+      <p>ให้ Claude ควบคุมเบราว์เซอร์ ทำงานบนเว็บแทนเรา</p></div>
+    <div class="card"><h3><span class="ico o">🔌</span>API</h3>
+      <p>สำหรับนักพัฒนา นำ Claude ไปฝังในระบบของตัวเอง</p></div>
+  </div>
+</section>
+
+<!-- 7 ================= UI หน้าแชทหลัก ================= -->
+<section class="slide" data-part="Part 1">
+  <div class="eyebrow">Part 1 · รู้จัก UI</div>
+  <h2>UI พื้นฐาน — <span class="hl">หน้าแชทหลัก</span></h2>
+  <ol class="numlist">
+    <li><div><b>ช่องพิมพ์ข้อความ (Prompt box)</b><span>หัวใจของทุกอย่าง — พิมพ์สิ่งที่อยากได้ กด Enter ส่ง / Shift+Enter ขึ้นบรรทัดใหม่</span></div></li>
+    <li><div><b>ปุ่ม + (แนบไฟล์)</b><span>อัพโหลดรูป, PDF, Excel, เอกสาร ให้ Claude อ่านและวิเคราะห์</span></div></li>
+    <li><div><b>ตัวเลือกโมเดล (Model selector)</b><span>เลือกว่าจะใช้สมองรุ่นไหน — อยู่มุมช่องพิมพ์ข้อความ</span></div></li>
+    <li><div><b>ปุ่มสลับโหมด Chat / Cowork / Code</b><span>ใน Desktop App เลือกได้ว่าจะให้ Claude "ตอบ" หรือ "ลงมือทำ"</span></div></li>
+    <li><div><b>ปุ่ม 👍 👎 / Copy / Retry ใต้คำตอบ</b><span>ให้คะแนนคำตอบ คัดลอก หรือให้ตอบใหม่</span></div></li>
+  </ol>
+</section>
+
+<!-- 8 ================= UI แถบด้านข้าง ================= -->
+<section class="slide" data-part="Part 1">
+  <div class="eyebrow">Part 1 · รู้จัก UI</div>
+  <h2>UI พื้นฐาน — <span class="hl">แถบด้านข้าง (Sidebar)</span></h2>
+  <div class="grid g2">
+    <div class="card"><h3><span class="ico o">📝</span>New Chat</h3>
+      <p>เริ่มบทสนทนาใหม่ — <b>ควรเริ่มใหม่เมื่อเปลี่ยนเรื่อง</b> เพื่อให้คำตอบแม่นและไม่เปลืองโควตา</p></div>
+    <div class="card"><h3><span class="ico t">🕐</span>Chats (ประวัติ)</h3>
+      <p>บทสนทนาเก่าทั้งหมด ค้นหาได้ เปลี่ยนชื่อได้ ลบได้ กลับมาคุยต่อได้</p></div>
+    <div class="card"><h3><span class="ico y">📁</span>Projects</h3>
+      <p>รวมแชท + ไฟล์ + คำสั่งประจำไว้ในที่เดียว เหมาะกับงานที่ทำต่อเนื่อง เช่น "โปรเจคร้านค้า"</p></div>
+    <div class="card"><h3><span class="ico v">⚙️</span>Settings</h3>
+      <p>ตั้งค่าโปรไฟล์ ภาษา ฟีเจอร์เสริม การเชื่อมต่อแอปอื่น (Connectors) และดูแผนการใช้งาน</p></div>
+  </div>
+</section>
+
+<!-- 9 ================= Projects ================= -->
+<section class="slide" data-part="Part 1">
+  <div class="eyebrow">Part 1 · รู้จัก UI</div>
+  <h2>Projects — โฟลเดอร์งานอัจฉริยะ</h2>
+  <div class="split">
+    <ol class="numlist" style="margin-top:0">
+      <li><div><b>รวมแชทเรื่องเดียวกันไว้ด้วยกัน</b><span>เช่น Project "แผนการตลาด 2027" มีทุกแชทที่เกี่ยวข้อง</span></div></li>
+      <li><div><b>ใส่ไฟล์ความรู้ (Project knowledge)</b><span>อัพโหลดเอกสารทิ้งไว้ Claude จะอ่านประกอบทุกครั้งที่คุย</span></div></li>
+      <li><div><b>ตั้งคำสั่งประจำ (Instructions)</b><span>เช่น "ตอบเป็นภาษาไทยเสมอ ใช้โทนสุภาพ" — ไม่ต้องพิมพ์ซ้ำทุกแชท</span></div></li>
+    </ol>
+    <div class="bigemoji">📁</div>
+  </div>
+</section>
+
+<!-- 10 ================= Artifacts & Design tab ================= -->
+<section class="slide" data-part="Part 1">
+  <div class="eyebrow">Part 1 · รู้จัก UI</div>
+  <h2>Artifacts &amp; Design tab — พื้นที่แสดงผลงาน</h2>
+  <div class="grid g2">
+    <div class="card on"><h3><span class="ico o">🎨</span>Artifacts คืออะไร</h3>
+      <p>เมื่อขอให้สร้างเว็บ เกม สไลด์ หรือเอกสาร Claude จะเปิด "หน้าต่างผลงาน" ข้างๆ แชท
+      ให้เห็นผลจริง กดเล่นได้ทันที และดาวน์โหลดได้</p></div>
+    <div class="card"><h3><span class="ico t">🖥️</span>Preview vs Code</h3>
+      <p>สลับดูได้ 2 มุมมอง: ผลลัพธ์ที่เรนเดอร์แล้ว หรือโค้ดเบื้องหลัง</p></div>
+    <div class="card"><h3><span class="ico v">✨</span>Design tab</h3>
+      <p>โหมดสร้างงานภาพ/สไลด์โดยเฉพาะ — ใช้ใน Workshop #1 สร้างสไลด์ 30 หน้า</p></div>
+    <div class="card"><h3><span class="ico t">🔄</span>แก้ต่อได้เรื่อยๆ</h3>
+      <p>ไม่พอใจตรงไหน พิมพ์บอกต่อได้เลย เช่น "เปลี่ยนเป็นโทนสีเข้ม" — Claude แก้ Artifact เดิมให้</p></div>
+  </div>
+</section>
+
+<!-- 11 ================= การแนบไฟล์ ================= -->
+<section class="slide" data-part="Part 1">
+  <div class="eyebrow">Part 1 · รู้จัก UI</div>
+  <h2>การแนบไฟล์และรูปภาพ</h2>
+  <div class="grid g3">
+    <div class="card"><h3><span class="ico o">📄</span>เอกสาร</h3>
+      <p>PDF, Word, TXT, Markdown — สรุป แปล ถามเนื้อหาในไฟล์ได้</p></div>
+    <div class="card"><h3><span class="ico t">📊</span>ตารางข้อมูล</h3>
+      <p>Excel, CSV — วิเคราะห์ยอดขาย หาแนวโน้ม สร้างกราฟ</p></div>
+    <div class="card"><h3><span class="ico v">🖼️</span>รูปภาพ</h3>
+      <p>ถ่ายรูปเอกสาร กราฟ หน้าจอ error — Claude "มองเห็น" และอธิบายได้</p></div>
+    <div class="card wide"><h3><span class="ico y">💡</span>3 วิธีแนบไฟล์</h3>
+      <p class="steps">① กดปุ่ม + แล้วเลือกไฟล์ &nbsp; ② ลากไฟล์มาวางในช่องแชท &nbsp; ③ Copy รูปแล้ว Paste (Ctrl+V) ลงช่องพิมพ์ได้เลย</p></div>
+  </div>
+  <div class="foot">ใช้จริงใน Workshop #3 — อัพโหลด PDF แล้วแปลงเป็นสื่อการสอนเด็ก</div>
+</section>
+
+<!-- 12 ================= ฟีเจอร์เสริม ================= -->
+<section class="slide" data-part="Part 1">
+  <div class="eyebrow">Part 1 · รู้จัก UI</div>
+  <h2>ฟีเจอร์เสริมที่ควรรู้จัก</h2>
+  <div class="grid g2">
+    <div class="card"><h3><span class="ico v">🧠</span>Extended Thinking</h3>
+      <p>ให้ Claude "คิดนานขึ้น" ก่อนตอบ — เหมาะกับโจทย์ยาก คณิตศาสตร์ วางแผนซับซ้อน</p></div>
+    <div class="card"><h3><span class="ico t">🔍</span>Web Search</h3>
+      <p>ค้นข้อมูลสดจากอินเทอร์เน็ต — ข่าว ราคา ข้อมูลล่าสุดที่ AI ไม่รู้จากความจำ</p></div>
+    <div class="card"><h3><span class="ico o">🔬</span>Research</h3>
+      <p>โหมดวิจัยลึก ค้นหลายสิบแหล่งแล้วเขียนรายงานพร้อมอ้างอิงให้</p></div>
+    <div class="card"><h3><span class="ico y">🎙️</span>Voice / Dictation</h3>
+      <p>พูดแทนพิมพ์ได้ สะดวกเวลาอยู่นอกสถานที่ (บนมือถือ)</p></div>
+  </div>
+</section>
+
+<!-- 13 ================= Part 2 divider ================= -->
+<section class="slide" data-part="Part 2">
+  <div class="bignum">02</div>
+  <h2>Chat vs <span class="tl">Cowork</span> vs <span class="vl">Code</span></h2>
+  <p class="lead">Claude มี 3 โหมดการทำงาน — ต่างกันตรง "ใครเป็นคนลงมือทำ"</p>
+</section>
+
+<!-- 14 ================= ภาพรวม 3 โหมด ================= -->
+<section class="slide" data-part="Part 2">
+  <div class="eyebrow">Part 2 · 3 โหมด</div>
+  <h2>ภาพรวม 3 โหมด — ต่างกันอย่างไร</h2>
+  <div class="tw"><table>
+    <thead><tr><th></th><th>💬 Chat</th><th>🤝 Cowork</th><th>⌨️ Code</th></tr></thead>
+    <tbody>
+      <tr><td><b>บทบาทของ Claude</b></td><td>ที่ปรึกษา — <b>บอกวิธี</b></td><td>ผู้ช่วย — <b>ลงมือทำให้</b></td><td>วิศวกร — <b>ทำครบวงจร</b></td></tr>
+      <tr><td><b>เข้าถึงไฟล์ในเครื่อง</b></td><td>เฉพาะไฟล์ที่แนบ</td><td><span class="ck">✓ ทั้งโฟลเดอร์ที่เลือก</span></td><td><span class="ck">✓ ทั้งโปรเจค</span></td></tr>
+      <tr><td><b>สร้าง/แก้ไฟล์จริง</b></td><td class="dash">—</td><td><span class="ck">✓</span></td><td><span class="ck">✓ + Git version</span></td></tr>
+      <tr><td><b>รันและทดสอบโค้ด</b></td><td class="dash">—</td><td><span class="ck">✓ ใน sandbox</span></td><td><span class="ck">✓ ในเครื่องจริง</span></td></tr>
+      <tr><td><b>เหมาะกับ</b></td><td>ถาม-ตอบ ไอเดีย ร่างงาน</td><td>งานเอกสาร วิเคราะห์ อัตโนมัติ</td><td>พัฒนาซอฟต์แวร์จริงจัง</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<!-- 15 ================= ตัวอย่าง Chat ================= -->
+<section class="slide" data-part="Part 2">
+  <div class="eyebrow">Part 2 · ตัวอย่างเดียวกัน 3 โหมด</div>
+  <h2>💬 Chat — <span class="hl">"อยากสร้างเว็บด้วย Flask"</span></h2>
+  <div class="split">
+    <div>
+      <div class="userbox"><div class="who">คุณพิมพ์</div>
+        <div class="msg">อยากสร้างเว็บด้วย Flask ทำยังไง?</div></div>
+      <div class="card" style="margin-top:16px"><h3><span class="ico t">💬</span>Claude ตอบ = "แค่บอก"</h3>
+        <p>อธิบายขั้นตอน + เขียนโค้ดตัวอย่างให้ในแชท</p>
+        <p>แต่<b>คุณต้องเอาไปสร้างไฟล์ ติดตั้ง รันเองทั้งหมด</b></p></div>
+    </div>
+    <div class="card listcard"><h3>เหมาะเมื่อ</h3>
+      <ul>
+        <li>อยากเรียนรู้และเข้าใจก่อน</li>
+        <li>ขอไอเดีย เปรียบเทียบทางเลือก</li>
+        <li>งานสั้นๆ copy โค้ดไปใช้เองได้</li>
+      </ul></div>
+  </div>
+</section>
+
+<!-- 16 ================= ตัวอย่าง Cowork ================= -->
+<section class="slide" data-part="Part 2">
+  <div class="eyebrow">Part 2 · ตัวอย่างเดียวกัน 3 โหมด</div>
+  <h2>🤝 Cowork — <span class="tl">"อยากสร้างเว็บด้วย Flask"</span></h2>
+  <div class="split">
+    <div>
+      <div class="userbox"><div class="who">คุณพิมพ์</div>
+        <div class="msg">อยากสร้างเว็บด้วย Flask</div></div>
+      <div class="card" style="margin-top:16px;border-color:rgba(63,191,160,.5)">
+        <h3><span class="ico t">🤝</span>Claude = "สร้างให้เลย"</h3>
+        <p>สร้างไฟล์ app.py, templates, ทดลองรันใน sandbox ตรวจว่าทำงานได้
+        แล้ววางไฟล์ทั้งหมดลงโฟลเดอร์ในเครื่องคุณ — <b>เปิดใช้ได้ทันที</b></p></div>
+    </div>
+    <div class="card listcard"><h3>เหมาะเมื่อ</h3>
+      <ul>
+        <li>อยากได้ "ผลลัพธ์" ไม่ใช่แค่คำแนะนำ</li>
+        <li>งานหลายขั้นตอน เช่น อ่านไฟล์ → วิเคราะห์ → สร้างรายงาน</li>
+        <li>ไม่ใช่โปรแกรมเมอร์ก็ใช้ได้</li>
+      </ul></div>
+  </div>
+</section>
+
+<!-- 17 ================= ตัวอย่าง Code ================= -->
+<section class="slide" data-part="Part 2">
+  <div class="eyebrow">Part 2 · ตัวอย่างเดียวกัน 3 โหมด</div>
+  <h2>⌨️ Code — <span class="vl">"อยากสร้างเว็บด้วย Flask"</span></h2>
+  <div class="split">
+    <div>
+      <div class="userbox"><div class="who">คุณพิมพ์</div>
+        <div class="msg">สร้างโปรเจคเว็บ Flask พร้อมระบบล็อกอิน</div></div>
+      <div class="card" style="margin-top:16px;border-color:rgba(139,123,232,.5)">
+        <h3><span class="ico v">⌨️</span>Claude = "ทำครบวงจร"</h3>
+        <p>สร้าง + แก้ + เก็บ <b>version (Git)</b> + เขียนเทสต์ + รันทดสอบจริง ในเครื่องคุณ
+        วนแก้จนผ่าน เหมือนมีโปรแกรมเมอร์นั่งข้างๆ</p></div>
+    </div>
+    <div class="card listcard"><h3>เหมาะเมื่อ</h3>
+      <ul>
+        <li>โปรเจคซอฟต์แวร์จริงจัง มีหลายไฟล์</li>
+        <li>ต้องแก้โค้ดเดิม ทดสอบ รันจริง</li>
+        <li>ใช้ร่วมกับ Git / Terminal (Workshop 5)</li>
+      </ul></div>
+  </div>
+</section>
+
+<!-- 18 ================= สรุปเลือกโหมด ================= -->
+<section class="slide" data-part="Part 2">
+  <div class="eyebrow">Part 2 · 3 โหมด</div>
+  <h2>สรุปง่ายๆ — เลือกโหมดไหนดี?</h2>
+  <ol class="numlist">
+    <li><div><b>อยากรู้ / อยากได้คำตอบ → 💬 Chat</b>
+      <span class="quote">"Flask คืออะไร" &nbsp;"ช่วยร่างอีเมลหน่อย" &nbsp;"สรุป PDF นี้ให้"</span></div></li>
+    <li><div><b>อยากได้ไฟล์งานสำเร็จ / ทำงานกับไฟล์ในเครื่อง → 🤝 Cowork</b>
+      <span class="quote">"วิเคราะห์ยอดขายใน Excel แล้วทำสไลด์ให้" &nbsp;"จัดระเบียบโฟลเดอร์นี้"</span></div></li>
+    <li><div><b>อยากพัฒนาโปรแกรมจริงจัง → ⌨️ Code</b>
+      <span class="quote">"สร้างเว็บแอป Flask ทดสอบและรันให้ด้วย"</span></div></li>
+  </ol>
+  <div class="foot">💡 จำง่ายๆ: Chat = ปาก, Cowork = มือ, Code = ทีมวิศวกร</div>
+</section>
+
+<!-- 19 ================= Pricing ================= -->
+<section class="slide" data-part="Part 2">
+  <div class="eyebrow">Part 2 · ก่อนไป Workshop</div>
+  <h2>Pricing &amp; Plans <span class="sm">(ก.ค. 2026 — เช็คล่าสุดที่ <span class="hl">claude.com/pricing</span>)</span></h2>
+  <div class="grid g3">
+    <div class="card price listcard"><h3>Free</h3>
+      <div class="amt">$0</div>
+      <ul><li>ใช้ได้ทุกแพลตฟอร์ม</li><li>โควตาจำกัด รีเซ็ตทุก 5 ชม.</li><li>เหมาะกับลองเล่น</li></ul></div>
+    <div class="card price listcard on"><h3>Pro ⭐</h3>
+      <div class="amt">$20<span class="per">/เดือน</span></div>
+      <ul><li>โควตามากขึ้นมาก</li><li>Research, Projects ไม่จำกัด</li><li>Cowork + Claude Code</li><li>รายปีเหลือ ~$17/เดือน</li></ul></div>
+    <div class="card price listcard"><h3>Max</h3>
+      <div class="amt">$100–200<span class="per">/เดือน</span></div>
+      <ul><li>โควตา 5×–20× ของ Pro</li><li>สำหรับผู้ใช้งานหนักมาก</li></ul></div>
+    <div class="card price listcard"><h3>Team</h3>
+      <div class="amt">$25+<span class="per">/คน/เดือน</span></div>
+      <ul><li>สำหรับองค์กร 5 คนขึ้นไป</li><li>ระบบแอดมิน + SSO</li></ul></div>
+  </div>
+  <div class="foot">สำหรับ Workshop วันนี้: แผน <b style="color:var(--accent)">Pro</b> เพียงพอ</div>
+</section>
+
+<!-- 20 ================= โควตา ================= -->
+<section class="slide" data-part="Part 2">
+  <div class="eyebrow">Part 2 · ก่อนไป Workshop</div>
+  <h2>โควตาการใช้งาน — ใช้ยังไงให้คุ้ม</h2>
+  <div class="grid g2">
+    <div class="card"><h3><span class="ico y">⏳</span>โควตารีเซ็ตเป็นรอบ</h3>
+      <p>ทุกแผนมีลิมิตการใช้งานต่อรอบเวลา (~5 ชั่วโมง) ใช้หมดต้องรอรอบถัดไป — วางแผนงานใหญ่ให้ดี</p></div>
+    <div class="card"><h3><span class="ico t">✂️</span>แชทยาว = เปลืองโควตา</h3>
+      <p>ทุกข้อความ Claude ต้องอ่านประวัติทั้งหมดซ้ำ — เปลี่ยนเรื่องเมื่อไหร่ เปิด New Chat</p></div>
+    <div class="card"><h3><span class="ico v">📋</span>รวมคำสั่งเป็นข้อความเดียว</h3>
+      <p>บอกให้ครบในครั้งเดียว ดีกว่าถามทีละนิด 10 รอบ</p></div>
+    <div class="card"><h3><span class="ico o">📉</span>เลือกโมเดลให้เหมาะ</h3>
+      <p>งานง่ายใช้โมเดลเล็ก ประหยัดโควตาไว้ให้งานยาก</p></div>
+  </div>
+</section>
+
+<!-- 21 ================= เขียน Prompt ================= -->
+<section class="slide" data-part="Part 2">
+  <div class="eyebrow">Part 2 · ก่อนไป Workshop</div>
+  <h2>เขียน <span class="hl">Prompt</span> อย่างไรให้ได้งานดี</h2>
+  <ol class="numlist">
+    <li><div><b>บอกให้ชัด: อะไร + รูปแบบไหน + เท่าไหร่</b>
+      <span>❌ "ทำสไลด์หน่อย" → ✅ "ทำสไลด์นำเสนอผู้บริหาร 10 หน้า ธีมสีเข้ม บันทึกเป็น HTML"</span></div></li>
+    <li><div><b>ให้บริบทและตัวอย่าง</b>
+      <span class="quote">"กลุ่มเป้าหมายคือเด็กประถม" / "เขียนโทนเดียวกับตัวอย่างนี้…"</span></div></li>
+    <li><div><b>บอกบทบาท (Role)</b>
+      <span class="quote">"สมมติว่าคุณเป็นเลขาจดบันทึกการประชุม…" — ใช้จริงใน Workshop #6</span></div></li>
+    <li><div><b>ทำงานใหญ่ทีละขั้น</b>
+      <span>Prompt 1 สร้างข้อมูล → Prompt 2 เอาไปทำสไลด์ (แบบ Workshop #4)</span></div></li>
+    <li><div><b>ไม่พอใจ = สั่งแก้ต่อได้เลย</b>
+      <span class="quote">"ขอสีสว่างกว่านี้" "ตัดข้อ 3 ออก" — ไม่ต้องเริ่มใหม่</span></div></li>
+  </ol>
+</section>
+
+<!-- 22 ================= ข้อควรระวัง ================= -->
+<section class="slide" data-part="Part 2">
+  <div class="eyebrow">Part 2 · ก่อนไป Workshop</div>
+  <h2>ข้อควรระวังสำหรับมือใหม่</h2>
+  <div class="grid g2">
+    <div class="card"><h3><span class="ico o">⚠️</span>AI ตอบผิดได้ (Hallucination)</h3>
+      <p>ข้อมูลตัวเลข ชื่อคน กฎหมาย — ตรวจสอบก่อนใช้จริงเสมอ โดยเฉพาะงานสำคัญ</p></div>
+    <div class="card"><h3><span class="ico o">🔒</span>ข้อมูลลับ/ส่วนตัว</h3>
+      <p>คิดก่อนอัพโหลด: ข้อมูลลูกค้า รหัสผ่าน เลขบัตร — ปฏิบัติตามนโยบายองค์กร</p></div>
+    <div class="card"><h3><span class="ico y">📂</span>Cowork แก้ไฟล์จริงได้</h3>
+      <p>เลือกโฟลเดอร์เฉพาะสำหรับงาน อย่าชี้ไปโฟลเดอร์สำคัญทั้งเครื่อง และสำรองไฟล์สำคัญไว้</p></div>
+    <div class="card"><h3><span class="ico v">👀</span>ตรวจงานก่อนส่งเสมอ</h3>
+      <p>Claude เก่งแต่ไม่สมบูรณ์แบบ — คุณคือผู้รับผิดชอบผลงานสุดท้าย</p></div>
+  </div>
+</section>
+
+<!-- 23 ================= Part 3 divider ================= -->
+<section class="slide" data-part="Part 3">
+  <div class="bignum">03</div>
+  <h2>10 ความสามารถของ <span class="tl">Claude Cowork</span></h2>
+  <p class="lead">ที่เหนือกว่า AI แชทธรรมดาทั่วไป — เพราะ Cowork ไม่ได้แค่ "ตอบ" แต่ "ทำงาน"</p>
+</section>
+
+<!-- 24 ================= ความสามารถ 1 ================= -->
+<section class="slide" data-part="Part 3">
+  <div class="eyebrow">Part 3 · ความสามารถที่ 1/10</div>
+  <h2><span class="cnum">①</span> เข้าถึงไฟล์จริงในเครื่องคุณ</h2>
+  <p class="lead">AI ทั่วไปเห็นแค่ไฟล์ที่คุณอัพโหลดทีละไฟล์ แต่ Cowork
+  <span class="hl">อ่าน เขียน แก้ไข ทั้งโฟลเดอร์</span>ที่คุณอนุญาต</p>
+  <div class="split">
+    <div class="card listcard"><h3>ตัวอย่างงานจริง</h3>
+      <ul>
+        <li>"เปลี่ยนชื่อรูป 500 ไฟล์ตามวันที่ถ่าย"</li>
+        <li>"อ่านรายงานทุกไฟล์ในโฟลเดอร์แล้วสรุปรวม"</li>
+        <li>"จัดไฟล์ในโฟลเดอร์ Downloads ให้เป็นหมวดหมู่"</li>
+      </ul></div>
+    <div class="bigemoji">📁</div>
+  </div>
+</section>
+
+<!-- 25 ================= ความสามารถ 2 ================= -->
+<section class="slide" data-part="Part 3">
+  <div class="eyebrow">Part 3 · ความสามารถที่ 2/10</div>
+  <h2><span class="cnum">②</span> ทำงานหลายขั้นตอนแบบอัตโนมัติ (Autonomous)</h2>
+  <p class="lead">สั่งครั้งเดียว Cowork <span class="hl">วางแผน → ลงมือ → ตรวจสอบ → แก้ไข</span>
+  เองจนจบ พร้อม Task list ให้เห็นความคืบหน้า</p>
+  <div class="split">
+    <div class="card listcard"><h3>ตัวอย่าง: "วิเคราะห์ยอดขายแล้วทำสไลด์"</h3>
+      <ul>
+        <li>1. อ่านไฟล์ Excel → 2. เขียนโค้ดวิเคราะห์ → 3. รันหาข้อมูลเด่น → 4. สร้างสไลด์ → 5. ตรวจความถูกต้อง</li>
+        <li>ทั้งหมดนี้จาก prompt เดียว</li>
+      </ul></div>
+    <div class="bigemoji">🔄</div>
+  </div>
+</section>
+
+<!-- 26 ================= ความสามารถ 3 ================= -->
+<section class="slide" data-part="Part 3">
+  <div class="eyebrow">Part 3 · ความสามารถที่ 3/10</div>
+  <h2><span class="cnum">③</span> สร้างไฟล์เอกสารจริง ใช้งานได้ทันที</h2>
+  <div class="grid g3">
+    <div class="card"><h3><span class="ico t">📝</span>Word</h3>
+      <p>.docx รายงาน จดหมาย พร้อมจัดรูปแบบ</p></div>
+    <div class="card"><h3><span class="ico t">📊</span>Excel</h3>
+      <p>.xlsx พร้อมสูตร กราฟ (Workshop #4)</p></div>
+    <div class="card"><h3><span class="ico v">🎬</span>PowerPoint</h3>
+      <p>.pptx สไลด์นำเสนอ</p></div>
+    <div class="card"><h3><span class="ico o">📄</span>PDF</h3>
+      <p>สร้าง รวม แยก กรอกฟอร์ม</p></div>
+    <div class="card on wide"><h3><span class="ico t">🌐</span>รวมถึง HTML + JavaScript</h3>
+      <p>เว็บ เกม สไลด์อินเทอร์แอคทีฟ — เปิดในเบราว์เซอร์ได้เลย ไม่ต้องมีโปรแกรมพิเศษ (ใช้เกือบทุก Workshop วันนี้)</p></div>
+  </div>
+</section>
+
+<!-- 27 ================= ความสามารถ 4 ================= -->
+<section class="slide" data-part="Part 3">
+  <div class="eyebrow">Part 3 · ความสามารถที่ 4/10</div>
+  <h2><span class="cnum">④</span> รันโค้ดได้จริงใน Sandbox ปลอดภัย</h2>
+  <p class="lead">Cowork มี <span class="hl">คอมพิวเตอร์ Linux จำลอง</span> ในตัว — เขียนโค้ด Python/JavaScript
+  แล้วรันทดสอบจริงก่อนส่งงาน</p>
+  <div class="split">
+    <div class="card listcard"><h3>ต่างจาก AI ธรรมดายังไง</h3>
+      <ul>
+        <li>AI ธรรมดา: เขียนโค้ดให้ แต่ไม่รู้ว่ารันได้จริงไหม</li>
+        <li>Cowork: รันเอง เจอ error แก้เอง จนได้ผลลัพธ์ถูกต้อง</li>
+        <li>ปลอดภัย: sandbox แยกจากเครื่องจริงของคุณ</li>
+      </ul></div>
+    <div class="bigemoji">🧪</div>
+  </div>
+</section>
+
+<!-- 28 ================= ความสามารถ 5 ================= -->
+<section class="slide" data-part="Part 3">
+  <div class="eyebrow">Part 3 · ความสามารถที่ 5/10</div>
+  <h2><span class="cnum">⑤</span> ค้นเว็บและวิจัยข้อมูลสด</h2>
+  <p class="lead">ค้นหาข้อมูลล่าสุดจากอินเทอร์เน็ต อ่านหลายแหล่ง เปรียบเทียบ แล้ว<span class="hl">สรุปเป็นรายงานพร้อมแหล่งอ้างอิง</span></p>
+  <div class="split">
+    <div class="card listcard"><h3>ตัวอย่างงานจริง</h3>
+      <ul>
+        <li>"หาราคาคู่แข่ง 5 เจ้าแล้วทำตารางเปรียบเทียบ"</li>
+        <li>"เทรนด์สินค้าเกษตรใน Reddit/Etsy/Amazon" (Workshop #8)</li>
+        <li>"ข่าวอุตสาหกรรมสัปดาห์นี้ สรุปเป็น 1 หน้า"</li>
+      </ul></div>
+    <div class="bigemoji">🔍</div>
+  </div>
+</section>
+
+<!-- 29 ================= ความสามารถ 6 ================= -->
+<section class="slide" data-part="Part 3">
+  <div class="eyebrow">Part 3 · ความสามารถที่ 6/10</div>
+  <h2><span class="cnum">⑥</span> ตั้งเวลาทำงานอัตโนมัติ (Scheduled Tasks)</h2>
+  <p class="lead">สั่งครั้งเดียว ให้ทำงาน<span class="hl">ซ้ำตามเวลา</span> — ทุกเช้า ทุก 3 ชั่วโมง ทุกวันจันทร์ — โดยไม่ต้องมานั่งสั่งเอง</p>
+  <div class="split">
+    <div class="card listcard"><h3>ตัวอย่างงานจริง</h3>
+      <ul>
+        <li>"ทุกเช้า 6 โมง สรุปข่าวให้ฉัน"</li>
+        <li>"ทุก 3 ชม. หาข้อมูลสินค้าใหม่แล้วบันทึกไฟล์" (Workshop #8)</li>
+        <li>"เตือนฉันอีก 1 ชั่วโมงให้ส่งอีเมล"</li>
+      </ul></div>
+    <div class="bigemoji">⏰</div>
+  </div>
+</section>
+
+<!-- 30 ================= ความสามารถ 7 ================= -->
+<section class="slide" data-part="Part 3">
+  <div class="eyebrow">Part 3 · ความสามารถที่ 7/10</div>
+  <h2><span class="cnum">⑦</span> เชื่อมต่อแอปที่คุณใช้ (Connectors / MCP)</h2>
+  <p class="lead">เชื่อม Claude เข้ากับ <span class="hl">Gmail, Google Drive, Slack, Notion, ปฏิทิน</span>
+  และแอปอื่นๆ — ให้อ่านและทำงานในแอปเหล่านั้นแทนคุณ</p>
+  <div class="split">
+    <div class="card listcard"><h3>ตัวอย่างงานจริง</h3>
+      <ul>
+        <li>"สรุปอีเมลที่ยังไม่ได้อ่านเมื่อวาน"</li>
+        <li>"ดูปฏิทินแล้วช่วยเตรียมประชุมพรุ่งนี้"</li>
+        <li>"ส่งสรุปงานเข้า Slack ทีม"</li>
+      </ul></div>
+    <div class="bigemoji">🔌</div>
+  </div>
+</section>
+
+<!-- 31 ================= ความสามารถ 8 ================= -->
+<section class="slide" data-part="Part 3">
+  <div class="eyebrow">Part 3 · ความสามารถที่ 8/10</div>
+  <h2><span class="cnum">⑧</span> ควบคุมเบราว์เซอร์และหน้าจอแทนคุณ</h2>
+  <p class="lead">ผ่าน Chrome Extension และ Computer Use — Claude <span class="hl">เปิดเว็บ คลิก กรอกฟอร์ม อ่านหน้าจอ</span>
+  ได้เหมือนมีคนนั่งทำให้</p>
+  <div class="split">
+    <div class="card listcard"><h3>ตัวอย่างงานจริง</h3>
+      <ul>
+        <li>"เข้าเว็บนี้แล้วเก็บราคาสินค้ามาให้"</li>
+        <li>"กรอกฟอร์มนี้จากข้อมูลใน Excel"</li>
+        <li>สอนใช้โปรแกรมบนหน้าจอแบบชี้ทีละขั้น</li>
+      </ul></div>
+    <div class="bigemoji">🖱️</div>
+  </div>
+</section>
+
+<!-- 32 ================= ความสามารถ 9 ================= -->
+<section class="slide" data-part="Part 3">
+  <div class="eyebrow">Part 3 · ความสามารถที่ 9/10</div>
+  <h2><span class="cnum">⑨</span> Skills — ทักษะเสริมเฉพาะทาง</h2>
+  <p class="lead">Skills คือ "คู่มือทำงาน" ที่สอน Claude ให้ทำงานเฉพาะด้านได้เก่งขึ้น เช่น สร้าง
+  Word/Excel/PowerPoint ระดับมืออาชีพ — และคุณ<span class="hl">สร้าง Skill ของตัวเองได้</span></p>
+  <div class="split">
+    <div class="card listcard"><h3>ตัวอย่าง</h3>
+      <ul>
+        <li>Skill สร้างเอกสารตามฟอร์แมตบริษัท</li>
+        <li>Skill สไตล์การเขียนของคุณเอง</li>
+        <li>ติดตั้งเพิ่มได้ผ่านระบบ Plugins</li>
+      </ul></div>
+    <div class="bigemoji">🧰</div>
+  </div>
+  <p class="foot">เดี๋ยว Part 4 เราจะลงลึกเรื่องนี้กันอีกที</p>
+</section>
+
+<!-- 33 ================= ความสามารถ 10 + สรุป Part 3 ================= -->
+<section class="slide" data-part="Part 3">
+  <div class="eyebrow">Part 3 · ความสามารถที่ 10/10</div>
+  <h2><span class="cnum">⑩</span> แตกทีมย่อยทำงานคู่ขนาน (Agents)</h2>
+  <p class="lead">งานใหญ่ Cowork แบ่งให้ <span class="hl">agent ย่อยหลายตัวทำพร้อมกัน</span>
+  เช่น ตัวหนึ่งค้นข้อมูล อีกตัวตรวจสอบ อีกตัวเขียนรายงาน</p>
+  <div class="grid">
+    <div class="card on"><h3><span class="ico o">🏆</span>สรุป: ทำไม Cowork ถึง "Autonomous"</h3>
+      <p>AI ธรรมดา = ถาม-ตอบ ทีละข้อความ คุณเป็นคนทำงาน</p>
+      <p><b>Cowork = มอบหมายงาน แล้ว AI วางแผน ลงมือ ตรวจสอบ ส่งมอบ — คุณเป็นคนตรวจรับ</b></p></div>
+  </div>
+  <p class="foot">ต่อไป… ต่อความสามารถให้ Claude ด้วย Skill แล้วลงมือทำจริงทั้ง 8 Workshop!</p>
+</section>
+
+<!-- 34 ================= Part 4 divider ================= -->
+<section class="slide" data-part="Part 4">
+  <div class="bignum">04</div>
+  <h2><span class="hl">Skill</span> &amp; Connector</h2>
+  <p class="lead">ต่อความสามารถให้ Claude — สอนวิธีทำงานแบบของเรา และเชื่อมเข้ากับแอปที่เราใช้อยู่</p>
+</section>
+
+<!-- 35 ================= Skill คืออะไร ================= -->
+<section class="slide" data-part="Part 4">
+  <div class="eyebrow">Part 4 · Skill</div>
+  <h2>Skill คืออะไร และทำไมถึงสำคัญ</h2>
+  <p class="lead">Skill คือ <span class="hl">คู่มือการทำงานที่เราเขียนให้ Claude อ่าน</span> —
+  บอกว่างานประเภทนี้ในองค์กรเรา ทำตามขั้นตอนไหน ใช้ฟอร์แมตอะไร ห้ามพลาดตรงไหน</p>
+  <div class="grid g2">
+    <div class="card"><h3><span class="ico r">😩</span>ไม่มี Skill</h3>
+      <p>ทุกครั้งที่สั่งงาน ต้องพิมพ์อธิบายขั้นตอนและฟอร์แมตใหม่หมด — ยาว ลืมง่าย และแต่ละคนสั่งไม่เหมือนกัน</p></div>
+    <div class="card on"><h3><span class="ico g">✅</span>มี Skill</h3>
+      <p>พิมพ์สั้นๆ ว่า "ทำรายงานประจำเดือน" — Claude หยิบคู่มือขึ้นมาอ่านเอง แล้วทำตามมาตรฐานเดียวกันทุกครั้ง ทุกคน</p></div>
+    <div class="card wide"><h3><span class="ico y">💡</span>คิดง่ายๆ แบบนี้</h3>
+      <p><b>Skill = SOP ของบริษัท ที่เขียนให้ AI อ่านรู้เรื่อง</b> — เขียนครั้งเดียว ใช้ได้ทั้งทีม และแก้ที่เดียวได้ทั้งระบบ</p></div>
+  </div>
+</section>
+
+<!-- 36 ================= โครงสร้าง Skill ================= -->
+<section class="slide" data-part="Part 4">
+  <div class="eyebrow">Part 4 · Skill</div>
+  <h2>โครงสร้างของ Skill — มีแค่ 3 ส่วน</h2>
+  <div class="split">
+    <ol class="numlist">
+      <li><div><b>ชื่อ (name)</b><span>ชื่อสั้นๆ ของทักษะนี้ เช่น monthly-sales-report</span></div></li>
+      <li><div><b>คำอธิบาย (description)</b><span>บอกว่า "ใช้เมื่อไหร่" — สำคัญที่สุด เพราะ Claude ใช้ตัดสินใจว่าจะหยิบ Skill นี้ขึ้นมาใช้ไหม</span></div></li>
+      <li><div><b>เนื้อหาคู่มือ</b><span>ขั้นตอน ฟอร์แมตที่ต้องการ ตัวอย่าง และข้อห้าม — เขียนเป็นภาษาคนธรรมดาได้เลย</span></div></li>
+    </ol>
+    <div class="pbox">
+      <div class="lb">ไฟล์ SKILL.md — หน้าตาประมาณนี้</div>
+      <div class="tx">---<br>
+      name: monthly-sales-report<br>
+      description: ใช้เมื่อผู้ใช้ขอสรุปยอดขายประจำเดือน<br>
+      ---<br>
+      1. อ่านไฟล์ยอดขาย<br>
+      2. เทียบกับเดือนก่อน<br>
+      3. สรุปเป็นตาราง + 3 ประเด็น</div>
+    </div>
+  </div>
+</section>
+
+<!-- 37 ================= Skill ที่แนะนำ ================= -->
+<section class="slide" data-part="Part 4">
+  <div class="eyebrow">Part 4 · Skill</div>
+  <h2>Skill ที่แนะนำให้ติดตั้ง</h2>
+  <div class="grid g2">
+    <div class="card"><h3><span class="ico o">📄</span>ชุดสร้างเอกสาร (มีมาให้แล้ว)</h3>
+      <p>docx / xlsx / pptx / pdf — เปิดใช้จากหน้า Settings แล้ว Claude จะสร้างไฟล์ Office ได้สวยและถูกฟอร์แมต
+      <b>ต้องเปิด code execution และ file creation ก่อน</b></p></div>
+    <div class="card on"><h3><span class="ico v">🧠</span>Karpathy</h3>
+      <p>บังคับให้ Claude อธิบายเรื่องยากแบบ "สอนจากศูนย์" — ไล่จากหลักการ ไปตัวอย่าง ไปข้อควรระวัง
+      เหมาะกับตอนอยากเข้าใจจริง ไม่ใช่แค่ได้คำตอบ</p></div>
+    <div class="card on"><h3><span class="ico t">🎤</span>Grill me</h3>
+      <p>สลับบทบาท: ให้ Claude <b>ซักเรากลับทีละคำถาม</b> ก่อนลงมือทำ — ใช้ตอนโจทย์ยังไม่ชัด
+      จะได้ไม่ได้งานที่ "สวยแต่ผิดโจทย์" (หลักสูตรนี้ก็ออกแบบด้วยวิธีนี้)</p></div>
+    <div class="card"><h3><span class="ico y">✍️</span>Skill ของคุณเอง</h3>
+      <p>เอา SOP / ฟอร์มรายงาน / สไตล์การเขียนของบริษัท มาเขียนเป็น Skill — นี่คือจุดที่ได้เปรียบจริง</p></div>
+  </div>
+</section>
+
+<!-- 38 ================= แหล่งที่มาของ Skill ================= -->
+<section class="slide" data-part="Part 4">
+  <div class="eyebrow">Part 4 · Skill</div>
+  <h2>Skill มาจากไหนได้บ้าง — 3 ทาง</h2>
+  <ol class="numlist">
+    <li><div><b>ของที่ Anthropic ทำมาให้</b><span>ชุดสร้างเอกสาร Office และอื่นๆ — แค่เปิดสวิตช์ในหน้า Settings ก็ใช้ได้ทันที</span></div></li>
+    <li><div><b>Skill Directory ในตัวแอป</b><span>Customize → Skills → ปุ่ม + → Browse skills แล้วเลือกติดตั้ง</span></div></li>
+    <li><div><b>อัปโหลดเอง (.zip)</b><span>ทำโฟลเดอร์ที่มีไฟล์ SKILL.md แล้วบีบเป็น .zip อัปโหลดเข้าไป — ใช้ได้ทั้ง Skill ที่เราเขียนเอง และที่โหลดจากชุมชน</span></div></li>
+  </ol>
+  <div class="note"><b>ข้อควรระวัง:</b> Skill ที่โหลดมาจากภายนอกคือคำสั่งที่ Claude จะทำตาม — อ่านเนื้อหาก่อนติดตั้งทุกครั้ง เหมือนที่เราไม่ติดตั้งโปรแกรมจากแหล่งที่ไม่รู้จัก</div>
+</section>
+
+<!-- 39 ================= MCP / Connector / Plugin ================= -->
+<section class="slide" data-part="Part 4">
+  <div class="eyebrow">Part 4 · Connector</div>
+  <h2>MCP / Connector / Plugin — ต่างกันยังไง</h2>
+  <div class="grid g3">
+    <div class="card"><h3><span class="ico o">🧰</span>Skill</h3>
+      <p><b>สอนวิธีทำ</b><br><span class="dash">คู่มือการทำงาน — ไม่ต่อกับระบบภายนอก</span></p></div>
+    <div class="card"><h3><span class="ico t">🔌</span>Connector</h3>
+      <p><b>ต่อกับแอป</b><br><span class="dash">Gmail, Drive, Calendar, Slack, Notion — ให้ Claude อ่านและทำงานในแอปนั้นได้</span></p></div>
+    <div class="card"><h3><span class="ico v">🔗</span>MCP</h3>
+      <p><b>มาตรฐานเบื้องหลัง</b><br><span class="dash">ภาษากลางที่ทำให้ Claude คุยกับระบบอื่นได้ — Connector ส่วนใหญ่สร้างบนมาตรฐานนี้</span></p></div>
+    <div class="card wide"><h3><span class="ico y">📦</span>Plugin</h3>
+      <p>ชุดรวม — เอา Skill + Connector + คำสั่งลัด มัดรวมเป็นแพ็กเดียว ติดตั้งทีเดียวได้ทั้งชุด เหมาะกับการแจกให้ทั้งทีมใช้เหมือนกัน</p></div>
+  </div>
+</section>
+
+<!-- 40 ================= Part 5 divider ================= -->
+<section class="slide" data-part="Part 5">
+  <div class="bignum">05</div>
+  <h2>Workshop <span class="hl">8 กิจกรรม</span></h2>
+  <p class="lead">ลงมือทำจริง ไล่จากง่ายไปยาก — ทุกคนทำตามได้ ไม่ต้องเขียนโค้ดเป็น</p>
+</section>
+
+<!-- 41 ================= แผนที่ Workshop ================= -->
+<section class="slide" data-part="Part 5">
+  <div class="eyebrow">Part 5 · ภาพรวม</div>
+  <h2>แผนที่ Workshop วันนี้</h2>
+  <div class="grid g4">
+    <div class="card"><h3><span class="num">#1</span> 🎨</h3>
+      <p><b>สไลด์ 30 หน้า</b><br><span class="dash">Chat + Design tab</span></p></div>
+    <div class="card"><h3><span class="num">#2</span> 🎮</h3>
+      <p><b>เกมฆ่าเวลา</b><br><span class="dash">HTML + JavaScript</span></p></div>
+    <div class="card"><h3><span class="num">#3</span> 👩‍🏫</h3>
+      <p><b>PDF → สื่อสอนเด็ก</b><br><span class="dash">Upload ไฟล์</span></p></div>
+    <div class="card"><h3><span class="num">#4</span> 📊</h3>
+      <p><b>ยอดขาย → สไลด์ผู้บริหาร</b><br><span class="dash">Cowork + Folder</span></p></div>
+    <div class="card"><h3><span class="num">#5</span> 🌍</h3>
+      <p><b>เว็บ Flask ออนไลน์จริง</b><br><span class="dash">Claude Code + Pinggy</span></p></div>
+    <div class="card"><h3><span class="num">#6</span> 📝</h3>
+      <p><b>สรุปการประชุม</b><br><span class="dash">Cowork</span></p></div>
+    <div class="card"><h3><span class="num">#7</span> ✉️</h3>
+      <p><b>อีเมลถึงผู้บริหาร</b><br><span class="dash">Cowork + PDF</span></p></div>
+    <div class="card"><h3><span class="num">#8</span> ⏰</h3>
+      <p><b>Research อัตโนมัติ</b><br><span class="dash">Cowork + Schedule</span></p></div>
+  </div>
+  <p class="foot">สิ่งที่ต้องเตรียม: Desktop App ล็อกอินแล้ว · สร้างโฟลเดอร์ว่างชื่อ "workshop" บน Desktop · PDF สั้นๆ 1–5 หน้า 1 ไฟล์</p>
+</section>
+
+<!-- 42 ================= Workshop #1 ================= -->
+<section class="slide" data-part="Part 5">
+  <div class="eyebrow row">Workshop #1 · <span class="tag">Chat + Design tab</span></div>
+  <h2>สร้างสไลด์ 30 หน้า ในหัวข้อที่คุณสนใจ</h2>
+  <ol class="numlist">
+    <li><div><b>เลือกหัวข้อที่ตัวเองชอบ</b><span>เช่น กาแฟ, ปลูกผัก, ท่องเที่ยวญี่ปุ่น, การออมเงิน — เรื่องที่เล่าได้ยาว 30 หน้า</span></div></li>
+    <li><div><b>เปิดโหมด Design แล้วสั่ง</b><span>ระบุหัวข้อ + จำนวน 30 สไลด์ + สไตล์ที่ต้องการ (สี ธีม กลุ่มผู้ฟัง)</span></div></li>
+    <li><div><b>ดูผลใน Artifact แล้วสั่งแก้</b><span>"เพิ่มรูปประกอบ" "เปลี่ยนสีธีม" "หน้า 12 ขอสั้นกว่านี้"</span></div></li>
+  </ol>
+  <div class="pbox">
+    <div class="lb">ตัวอย่าง Prompt</div>
+    <div class="tx">สร้างสไลด์ 30 หน้า หัวข้อ "[หัวข้อที่คุณสนใจ]" สำหรับนำเสนอมือใหม่ ธีมสวยงาม อ่านง่าย มีหน้าปก สารบัญ และสรุปท้าย</div>
+  </div>
+</section>
+
+<!-- 43 ================= Workshop #2 ================= -->
+<section class="slide" data-part="Part 5">
+  <div class="eyebrow row">Workshop #2 · <span class="tag">Chat / Cowork</span></div>
+  <h2>สร้างเกมฆ่าเวลา 🎮</h2>
+  <p class="lead">Claude เขียนเกมที่เล่นบนเบราว์เซอร์ได้ในไม่กี่นาที — ไม่ต้องเขียนโค้ดเองสักบรรทัด</p>
+  <div class="grid g4">
+    <div class="card"><h3><span class="ico o">🃏</span></h3>
+      <p><b>เกมจับคู่</b><br><span class="dash">ฝึกความจำ พลิกการ์ดหาคู่</span></p></div>
+    <div class="card"><h3><span class="ico t">🚀</span></h3>
+      <p><b>เกมอวกาศ</b><br><span class="dash">ยิงอุกกาบาต หลบศัตรู</span></p></div>
+    <div class="card"><h3><span class="ico v">🌀</span></h3>
+      <p><b>เกมเขาวงกต</b><br><span class="dash">หาทางออก จับเวลา</span></p></div>
+    <div class="card"><h3><span class="ico y">💥</span></h3>
+      <p><b>เกมรถถัง</b><br><span class="dash">ยิงต่อสู้ 2 ผู้เล่น</span></p></div>
+  </div>
+  <p class="foot">เคล็ดลับ: เริ่มจากเกมง่าย เล่นดู แล้วค่อยสั่งเพิ่มฟีเจอร์ เช่น "เพิ่มคะแนน" "เพิ่มด่าน" "ใส่เสียง"</p>
+</section>
+
+<!-- 44 ================= Workshop #2 prompts ================= -->
+<section class="slide" data-part="Part 5">
+  <div class="eyebrow">Workshop #2 · Prompts</div>
+  <h2>Workshop #2 — ลงมือทำ</h2>
+  <div class="pbox">
+    <div class="lb">Prompt 1 — หาไอเดียก่อน</div>
+    <div class="tx">ช่วยยกตัวอย่างเกมแบบง่ายๆ ที่สามารถรันบน web browser ได้ 30 เกม</div>
+  </div>
+  <div class="pbox">
+    <div class="lb">Prompt 2 — เลือกแล้วสร้างเลย</div>
+    <div class="tx">สร้างเกมงูแล้วบันทึกเป็น html+javascript</div>
+  </div>
+  <div class="grid">
+    <div class="card"><h3><span class="ico g">✅</span>สิ่งที่จะได้เรียนรู้</h3>
+      <p>· ใช้ AI ระดมไอเดียก่อนลงมือ (Prompt 1) แล้วค่อยสั่งผลิต (Prompt 2)</p>
+      <p>· ไฟล์ HTML 1 ไฟล์ = เกมสมบูรณ์ ดับเบิลคลิกเปิดเล่นได้เลย</p>
+      <p>· ลองสั่งแก้ต่อ: "ให้งูเร็วขึ้นเรื่อยๆ" "เก็บคะแนนสูงสุด" "ใส่ธีมอวกาศ"</p></div>
+  </div>
+</section>
+
+<!-- 45 ================= Workshop #3 ================= -->
+<section class="slide" data-part="Part 5">
+  <div class="eyebrow row">Workshop #3 · <span class="tag">Chat + Upload PDF</span></div>
+  <h2>แปลง PDF เป็นสื่อการสอนเด็ก 👩‍🏫</h2>
+  <ol class="numlist">
+    <li><div><b>หาไฟล์ PDF สั้นๆ (1–5 หน้า)</b><span>สไลด์ ใบปลิว หรือหนังสือสั้นๆ เช่น วิธีปลูกผัก วิธีทำกับข้าว</span></div></li>
+    <li><div><b>อัพโหลดเข้า Claude (หรือใช้ Cowork ชี้ไฟล์)</b><span>ลากไฟล์วางในช่องแชท</span></div></li>
+    <li><div><b>สั่งแปลงเป็นเว็บ interactive</b><span>Claude อ่านเนื้อหาแล้วออกแบบใหม่ให้เหมาะกับเด็ก มีภาพ มีเกม มีแบบทดสอบ</span></div></li>
+  </ol>
+  <div class="pbox">
+    <div class="lb">Prompt</div>
+    <div class="tx">ช่วยสร้างเว็บ (html+javascript) แบบ interactive สำหรับสอนเด็ก โดยอ้างอิงจากเนื้อหาในไฟล์นี้</div>
+  </div>
+</section>
+
+<!-- 46 ================= Workshop #3 บทเรียน ================= -->
+<section class="slide" data-part="Part 5">
+  <div class="eyebrow">Workshop #3 · แนวคิดสำคัญ</div>
+  <h2>บทเรียนจาก Workshop #3</h2>
+  <div class="grid g2">
+    <div class="card on"><h3><span class="ico t">🔄</span>เนื้อหาเดิม → รูปแบบใหม่</h3>
+      <p>นี่คือพลังที่แท้จริงของ AI: เอกสารน่าเบื่อ 1 ไฟล์ กลายเป็นสื่อ interactive ได้ใน 1 คำสั่ง</p></div>
+    <div class="card"><h3><span class="ico o">🎯</span>ระบุกลุ่มเป้าหมายเสมอ</h3>
+      <p>"สำหรับสอนเด็ก" ทำให้ Claude เลือกภาษาง่าย สีสดใส มีเกม — เปลี่ยนเป็น "สำหรับผู้สูงอายุ" ผลลัพธ์จะต่างไป</p></div>
+    <div class="card"><h3><span class="ico v">➕</span>ลองสั่งเพิ่ม</h3>
+      <p>"เพิ่มแบบทดสอบท้ายบท 5 ข้อ" "ใส่เสียงอ่านให้ด้วย" "เพิ่มปุ่มดูเฉลย"</p></div>
+    <div class="card"><h3><span class="ico y">💼</span>ประยุกต์กับงานจริง</h3>
+      <p>คู่มือพนักงาน, เอกสารอบรม, ใบความรู้ลูกค้า — แปลงเป็นสื่อเข้าใจง่ายได้หมด</p></div>
+  </div>
+</section>
+
+<!-- 47 ================= Workshop #4 ================= -->
+<section class="slide" data-part="Part 5">
+  <div class="eyebrow row">Workshop #4 · <span class="tag t">Cowork + Select Folder</span></div>
+  <h2>สุ่มข้อมูลยอดขาย → สไลด์ผู้บริหาร 📊</h2>
+  <ol class="numlist">
+    <li><div><b>เปิดโหมด Cowork แล้วเลือกโฟลเดอร์งาน</b><span>Claude จะบันทึกไฟล์ทั้งหมดลงโฟลเดอร์นี้จริงๆ</span></div></li>
+    <li><div><b>Prompt 1: สร้างข้อมูลตัวอย่าง 1,000 รายการ</b><span>Cowork เขียนโค้ด Python สุ่มข้อมูล แล้วบันทึกเป็น .xlsx จริงในโฟลเดอร์</span></div></li>
+    <li><div><b>Prompt 2: วิเคราะห์แล้วทำสไลด์</b><span>Cowork อ่านไฟล์ Excel วิเคราะห์ยอดขาย แล้วสร้างสไลด์ HTML ธีมเข้ม</span></div></li>
+  </ol>
+  <p class="foot">💡 นี่คือ workflow วิเคราะห์ข้อมูลจริง — แค่เปลี่ยนไฟล์สุ่มเป็นไฟล์ยอดขายจริงของคุณ</p>
+</section>
+
+<!-- 48 ================= Workshop #4 prompts ================= -->
+<section class="slide" data-part="Part 5">
+  <div class="eyebrow">Workshop #4 · Prompts</div>
+  <h2>Workshop #4 — ลงมือทำ</h2>
+  <div class="pbox">
+    <div class="lb">Prompt 1 — สร้างข้อมูล</div>
+    <div class="tx">สุ่มยอดขาย 1000 รายการ โดยสมมติว่าเป็น "ร้านขายอุปกรณ์คอมพิวเตอร์" ที่มีอุปกรณ์ 100 ชนิด (100 barcode) จากนั้นบันทึกเป็นไฟล์ xlsx เพื่อใช้ในการฝึกวิเคราะห์ข้อมูล</div>
+  </div>
+  <div class="pbox">
+    <div class="lb">Prompt 2 — วิเคราะห์ + สไลด์</div>
+    <div class="tx">จากไฟล์ที่สุ่มมา ช่วยสร้างสไลด์พรีเซนต์ให้ผู้บริหารหน่อย (ขอสวยๆ ธีมสี dark tone) ขอเป็นไฟล์ html</div>
+  </div>
+  <div class="grid">
+    <div class="card"><h3><span class="ico g">✅</span>สังเกตอะไรบ้าง</h3>
+      <p>· Cowork เขียนและ<b>รันโค้ดจริงเพื่อสุ่มข้อมูล</b> — ไม่ใช่แค่พิมพ์ตัวเลขมั่ว</p>
+      <p>· Prompt 2 ไม่ต้องแนบไฟล์ซ้ำ เพราะ Cowork เห็นโฟลเดอร์อยู่แล้ว</p>
+      <p>· เปิดไฟล์ xlsx และ html ดูได้ทันทีจากโฟลเดอร์</p></div>
+  </div>
+</section>
+
+<!-- 49 ================= Workshop #5 ================= -->
+<section class="slide" data-part="Part 5">
+  <div class="eyebrow row">Workshop #5 · <span class="tag v">Claude Code + Select Folder</span></div>
+  <h2>เอาสไลด์ขึ้นเว็บจริง ด้วย Flask + Pinggy 🌍</h2>
+  <ol class="numlist">
+    <li><div><b>เปิด Claude Code แล้วชี้ไปโฟลเดอร์เดิมจาก Workshop #4</b><span>Claude Code จะเห็นไฟล์ html ที่สร้างไว้</span></div></li>
+    <li><div><b>สั่งสร้างโปรเจค Flask + เปิด tunnel</b><span>Claude Code สร้างโปรเจค รันเซิร์ฟเวอร์ และใช้ pinggy.io เปิดให้เข้าจากอินเทอร์เน็ตได้</span></div></li>
+    <li><div><b>สแกน QR / กดลิงค์จากมือถือ</b><span>เว็บของคุณออนไลน์จริง เพื่อนข้างๆ เปิดดูได้!</span></div></li>
+  </ol>
+  <div class="pbox">
+    <div class="lb">Prompt</div>
+    <div class="tx">สร้างโปรเจค python flask โดยนำไฟล์ html โปรเจคก่อนหน้านี้มาเป็นหน้า home page แล้ว tunneling ด้วย https://pinggy.io/ จากนั้นให้ลองสแกน qr หรือกดเข้าเว็บจากลิ้งค์</div>
+  </div>
+</section>
+
+<!-- 50 ================= Workshop #6 ================= -->
+<section class="slide" data-part="Part 5">
+  <div class="eyebrow row">Workshop #6 · <span class="tag t">Cowork</span></div>
+  <h2>สรุปบันทึกการประชุมเป็นสไลด์ 📝</h2>
+  <div class="pbox">
+    <div class="lb">Prompt 1 — สร้างข้อมูลจำลอง (Role play)</div>
+    <div class="tx">ให้สมมติว่าตัวเองเป็นเลขาจดบันทึกการประชุม สร้างข้อความบันทึกการประชุม (rawdata) เกี่ยวกับ product ใหม่ที่ควรขายในปี 2027 เกี่ยวกับธุรกิจ "ขายเครื่องมือเกษตรราคาไม่เกิน 1500 บาท"</div>
+  </div>
+  <div class="pbox">
+    <div class="lb">Prompt 2 — สรุปเป็นสไลด์</div>
+    <div class="tx">สรุปจากข้อความประชุมเป็นสไลด์นำเสนอ html</div>
+  </div>
+  <div class="grid">
+    <div class="card"><h3><span class="ico g">✅</span>ใช้งานจริง</h3>
+      <p>· งานจริง: เอาโน้ตประชุมจริง / transcript จาก Zoom มาแทน Prompt 1 ได้เลย</p>
+      <p>· เทคนิค Role ("สมมติว่าเป็นเลขา…") ช่วยให้ผลลัพธ์มีโครงสร้างแบบมืออาชีพ</p></div>
+  </div>
+</section>
+
+<!-- 51 ================= Workshop #7 ================= -->
+<section class="slide" data-part="Part 5">
+  <div class="eyebrow row">Workshop #7 · <span class="tag t">Cowork</span></div>
+  <h2>เขียนอีเมลสั้นๆ ถึงผู้บริหาร ✉️</h2>
+  <ol class="numlist">
+    <li><div><b>Export สไลด์จาก Workshop #6 เป็น PDF</b><span>สั่ง Cowork แปลง html → pdf ให้ได้เลย</span></div></li>
+    <li><div><b>สั่งเขียนอีเมลสรุปสั้นๆ</b><span>เชิญผู้บริหารเปิดอ่านไฟล์ PDF ที่แนบ — เน้นกระชับ ประเด็นชัด</span></div></li>
+  </ol>
+  <div class="pbox">
+    <div class="lb">ตัวอย่าง Prompt</div>
+    <div class="tx">ช่วยแปลงไฟล์สไลด์ html จาก workshop ก่อนหน้าเป็น pdf จากนั้นเขียนอีเมลสั้นๆ ถึงผู้บริหาร สรุปประเด็นสำคัญ 3 ข้อ และเชิญให้เปิดอ่านรายละเอียดในไฟล์ pdf ที่แนบ</div>
+  </div>
+  <div class="grid">
+    <div class="card"><h3><span class="ico g">✅</span>บทเรียน</h3>
+      <p>· งานต่อเนื่องหลายรูปแบบไฟล์ (html → pdf → email) จบใน Cowork ที่เดียว</p>
+      <p>· อีเมลผู้บริหารที่ดี: สั้น, บอกว่าต้องตัดสินใจอะไร, แนบรายละเอียดแยก</p></div>
+  </div>
+</section>
+
+<!-- 52 ================= Workshop #8 ================= -->
+<section class="slide" data-part="Part 5">
+  <div class="eyebrow row">Workshop #8 · <span class="tag t">Cowork + Schedule</span></div>
+  <h2>Research อัตโนมัติทุก 3 ชั่วโมง ⏰</h2>
+  <p class="lead">โจทย์: หาข้อมูล product ใหม่เพื่อขาย จากเว็บ Reddit / Etsy / Amazon</p>
+  <div class="pbox">
+    <div class="lb">Prompt</div>
+    <div class="tx">Research หาข้อมูลเกี่ยวกับ "เครื่องมือเกษตรที่คนใช้งานบ่อยจากทั่วโลก" จากเว็บ reddit / etsy / amazon บันทึกเป็นไฟล์ .md พร้อมตั้งชื่อไฟล์ที่มีวันที่และเวลา และตั้งเวลาให้รันทุก 3 ชั่วโมง</div>
+  </div>
+  <div class="grid">
+    <div class="card on"><h3><span class="ico o">🤖</span>นี่แหละ Autonomous Work ของจริง</h3>
+      <p>· Claude ค้นเว็บ → สรุป → บันทึกไฟล์ (ชื่อมีวันที่+เวลา ไม่ทับกัน) → <b>ทำซ้ำเองทุก 3 ชม.</b></p>
+      <p>· คุณกลับมาเปิดโฟลเดอร์ทีเดียว มีรายงานรอเป็นชุด</p>
+      <p>· ประยุกต์: ติดตามราคาคู่แข่ง, ข่าวอุตสาหกรรม, รีวิวสินค้าตัวเอง</p></div>
+  </div>
+</section>
+
+<!-- 53 ================= สรุป ================= -->
+<section class="slide" data-part="สรุป">
+  <div class="eyebrow">สรุป</div>
+  <h2>สิ่งที่คุณทำได้แล้ววันนี้ 🎉</h2>
+  <div class="grid g2">
+    <div class="card"><h3><span class="ico y">🧭</span>เข้าใจเครื่องมือ</h3>
+      <p>UI ของ Claude, โมเดล, Pricing และรู้ว่าเมื่อไหร่ใช้ Chat / Cowork / Code</p></div>
+    <div class="card"><h3><span class="ico g">⚡</span>เห็นพลัง Autonomous</h3>
+      <p>10 ความสามารถที่ทำให้ Cowork "ทำงานแทน" ไม่ใช่แค่ "ตอบคำถาม"</p></div>
+    <div class="card"><h3><span class="ico v">🧩</span>ต่อความสามารถเองได้</h3>
+      <p>รู้ว่า Skill คืออะไร ติดตั้งจากไหน 3 ทาง และ Connector / MCP / Plugin ต่างกันยังไง</p></div>
+    <div class="card"><h3><span class="ico o">🛠️</span>ผลงานจริง 8 ชิ้น</h3>
+      <p>สไลด์ 30 หน้า, เกม, สื่อสอนเด็ก, รายงานวิเคราะห์, เว็บออนไลน์, สรุปประชุม, อีเมล, Research bot</p></div>
+  </div>
+  <p class="foot">ขั้นต่อไป: เอา workflow เหล่านี้ไปใช้กับข้อมูลจริงของคุณ — เริ่มจากงานซ้ำซากที่ทำทุกสัปดาห์</p>
+</section>
+
+<!-- 54 ================= กฎทอง 5 ข้อ ================= -->
+<section class="slide" data-part="สรุป">
+  <div class="eyebrow">ก่อนจาก</div>
+  <h2>กฎทอง 5 ข้อของการทำงานกับ AI</h2>
+  <ol class="numlist">
+    <li><div><b>สั่งให้ชัด เหมือนสั่งงานพนักงานใหม่</b><span>บอกเป้าหมาย รูปแบบ และตัวอย่างที่ต้องการ</span></div></li>
+    <li><div><b>ให้ AI ทำ ให้คุณตรวจ</b><span>ผลงานสุดท้ายเป็นความรับผิดชอบของคุณเสมอ</span></div></li>
+    <li><div><b>เริ่มเล็ก แล้วค่อยขยาย</b><span>ทำ workflow ง่ายให้เวิร์คก่อน ค่อยเพิ่มความซับซ้อน</span></div></li>
+    <li><div><b>ระวังข้อมูลลับ</b><span>คิดก่อนอัพโหลด และเลือกโฟลเดอร์งานแยกจากไฟล์สำคัญ</span></div></li>
+    <li><div><b>ฝึกทุกวัน</b><span>ทักษะ AI เหมือนขับรถ — เก่งได้ด้วยชั่วโมงบิน ไม่ใช่แค่ทฤษฎี</span></div></li>
+  </ol>
+</section>
+
+<!-- 55 ================= ขอบคุณ ================= -->
+<section class="slide title" data-part="จบ">
+  <div class="brandmark"><svg viewBox="0 0 24 24"><path d="M12 3v18M3 12h18M5.6 5.6l12.8 12.8M18.4 5.6L5.6 18.4"/></svg></div>
+  <h1>ขอบคุณครับ 🙏</h1>
+  <p class="lead">Q &amp; A — สงสัยตรงไหน ถามได้เลย<br>หรือเปิด Claude แล้วลองถามมันดูก็ได้ 😊</p>
+  <div class="chips">
+    <a class="chip c1" href="https://claude.ai" target="_blank" rel="noopener">claude.ai</a>
+    <a class="chip c2" href="https://claude.com/pricing" target="_blank" rel="noopener">claude.com/pricing</a>
+    <span class="chip c3">Autonomous Work with Claude Cowork</span>
+  </div>
+</section>
+
+</div><!-- /.deck -->
+
+<div class="pbar" id="pbar" style="width:0"></div>
+<button class="side l" id="prev" aria-label="สไลด์ก่อนหน้า">‹</button>
+<button class="side r" id="next" aria-label="สไลด์ถัดไป">›</button>
+<div class="bottom">
+  <span class="name">Autonomous Work with Claude Cowork · for Beginners</span>
+  <span class="sp"></span>
+  <span class="cnt">สไลด์ <b id="cur">1</b> / <b id="tot">1</b></span>
+  <button id="bprev" aria-label="สไลด์ก่อนหน้า">←</button>
+  <button id="bnext" aria-label="สไลด์ถัดไป">→</button>
+  <span class="keyhint">Space</span>
+  <button id="bhome">Home</button>
+  <button id="bend">End</button>
+</div>
+
+<script>
+document.documentElement.className += ' js';
+(function(){
+  var slides = [].slice.call(document.querySelectorAll('.slide'));
+  var n = slides.length, i = 0;
+  var pbar = document.getElementById('pbar');
+  var cur  = document.getElementById('cur');
+  document.getElementById('tot').textContent = n;
+
+  slides.forEach(function(s, k){ s.id = 's' + (k + 1); });
+
+  function show(k, push){
+    i = Math.max(0, Math.min(n - 1, k));
+    slides.forEach(function(s, j){ s.classList.toggle('on', j === i); });
+    cur.textContent = i + 1;
+    pbar.style.width = ((i + 1) / n * 100) + '%';
+    if (push !== false && location.hash !== '#s' + (i + 1)) {
+      history.replaceState(null, '', '#s' + (i + 1));
+    }
+    window.scrollTo(0, 0);
+  }
+  function go(d){ show(i + d); }
+
+  function fromHash(){
+    var m = /^#s(\d+)$/.exec(location.hash);
+    if (m) { show(parseInt(m[1], 10) - 1, false); return true; }
+    return false;
+  }
+
+  document.addEventListener('keydown', function(e){
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    var t = e.target;
+    if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA')) return;
+    switch (e.key) {
+      case 'ArrowRight': case 'PageDown': case ' ': case 'Spacebar':
+        e.preventDefault(); go(1); break;
+      case 'ArrowLeft': case 'PageUp':
+        e.preventDefault(); go(-1); break;
+      case 'Home': e.preventDefault(); show(0); break;
+      case 'End':  e.preventDefault(); show(n - 1); break;
+    }
+  });
+
+  document.getElementById('next').onclick  = function(){ go(1); };
+  document.getElementById('prev').onclick  = function(){ go(-1); };
+  document.getElementById('bnext').onclick = function(){ go(1); };
+  document.getElementById('bprev').onclick = function(){ go(-1); };
+  document.getElementById('bhome').onclick = function(){ show(0); };
+  document.getElementById('bend').onclick  = function(){ show(n - 1); };
+
+  window.addEventListener('hashchange', function(){ fromHash(); });
+
+  /* ปัดนิ้วบนแท็บเล็ต/มือถือ */
+  var x0 = null, y0 = null;
+  document.addEventListener('touchstart', function(e){
+    if (e.touches.length !== 1) { x0 = null; return; }
+    x0 = e.touches[0].clientX; y0 = e.touches[0].clientY;
+  }, {passive:true});
+  document.addEventListener('touchend', function(e){
+    if (x0 === null) return;
+    var t = e.changedTouches[0];
+    var dx = t.clientX - x0, dy = t.clientY - y0;
+    if (Math.abs(dx) > 55 && Math.abs(dx) > Math.abs(dy) * 1.6) go(dx < 0 ? 1 : -1);
+    x0 = null;
+  }, {passive:true});
+
+  if (!fromHash()) show(0);
+})();
+</script>
+
